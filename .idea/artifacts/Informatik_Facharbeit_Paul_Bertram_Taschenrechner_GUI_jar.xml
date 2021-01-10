@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Informatik Facharbeit Paul Bertram Taschenrechner GUI:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Informatik_Facharbeit_Paul_Bertram_Taschenrechner_GUI_jar</output-path>
+    <root id="archive" name="Informatik Facharbeit Paul Bertram Taschenrechner GUI.jar">
+      <element id="module-output" name="Facharbeit Paul Taschenrechner" />
+    </root>
+  </artifact>
+</component>
