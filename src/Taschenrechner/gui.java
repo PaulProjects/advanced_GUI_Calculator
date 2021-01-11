@@ -51,15 +51,14 @@ public class gui implements ActionListener {
         loesung.setBackground(Color.WHITE);
 
         //Erzeugung der Listenansicht [Quelle:https://www.educba.com/jlist-in-java/]
-        DefaultListModel<String> model = new DefaultListModel<>();
-        final JList<String> rechnungen = new JList<>(model);
-        rechnungen.setLayoutOrientation(JList.VERTICAL);
+        DefaultListModel<String> model0 = new DefaultListModel<>();
+        final JList<String> rechnungen0 = new JList<>(model0);
         //Hintergrundfarbe
-        rechnungen.setBackground(Color.WHITE);
+        rechnungen0.setBackground(Color.WHITE);
 
         //Die Liste scrollbar machen
         JScrollPane scrollPaneRechnungen = new JScrollPane();
-        scrollPaneRechnungen.setViewportView(rechnungen);
+        scrollPaneRechnungen.setViewportView(rechnungen0);
         scrollPaneRechnungen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRechnungen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -140,7 +139,7 @@ public class gui implements ActionListener {
 
         //Clear List
         i4.addActionListener(actionEvent -> {
-            DefaultListModel<String> listModel = (DefaultListModel<String>) rechnungen.getModel();
+            DefaultListModel<String> listModel = (DefaultListModel<String>) rechnungen0.getModel();
             listModel.removeAllElements();
         });
 
@@ -582,7 +581,7 @@ public class gui implements ActionListener {
                     sstr = sstr.substring(0, sstr.length() - 2);
                 }
                 //Ergebnis der Liste hinzufügen
-                model.addElement("√" + wurzelterm + "=" + sstr);
+                model0.addElement("√" + wurzelterm + "=" + sstr);
                 //Ergebnis in textFeld setzen
                 int j = textFeld.getCaretPosition();
                 String global = textFeld.getText();
@@ -678,7 +677,7 @@ public class gui implements ActionListener {
                     s = s.substring(0, s.length() - 2);
                 }
                 //Ergebnis der Liste hinzufügen
-                model.addElement(textFeld.getText() + "=" + s);
+                model0.addElement(textFeld.getText() + "=" + s);
                 //Ergebnis in textFeld setzen
                 textFeld.setText(s);
             } catch (Exception d) {
@@ -888,7 +887,7 @@ public class gui implements ActionListener {
 
         //Die Liste scrollbar machen
         JScrollPane scrollPaneRechnungen1 = new JScrollPane();
-        scrollPaneRechnungen1.setViewportView(rechnungen);
+        scrollPaneRechnungen1.setViewportView(variablen);
         scrollPaneRechnungen1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRechnungen1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -974,9 +973,9 @@ public class gui implements ActionListener {
 				dieser Rechnung in das Rechenfeld einfügt.
 		*/
         //Listen clickevent [Quelle:https://docs.oracle.com/javase/tutorial/uiswing/events/listselectionlistener.html]
-        rechnungen.addListSelectionListener(listSelectionEvent -> {
+        rechnungen0.addListSelectionListener(listSelectionEvent -> {
             //Das Feld welches angeklickt wird wird in str gespeichert [Quelle:https://stackoverflow.com/questions/28852864/get-the-selected-values-from-jlist-in-java]
-            String str = String.valueOf(rechnungen.getSelectedValue());
+            String str = String.valueOf(rechnungen0.getSelectedValue());
             //Fall der Benutzer ein leeres Feld anklickt
             str = str.replaceAll("null", "");
             //Nur das Ergebnis wird benötigt [Quelle:https://stackoverflow.com/questions/16741274/java-extract-characters-after-a-specific-character]
@@ -984,7 +983,7 @@ public class gui implements ActionListener {
             //Das Ergebnis wird in das TextFeld eingefügt
             textFeld.setText(textFeld.getText() + str);
             //Auswahl wird rückgängig gemacht [Quelle:https://www.tutorialspoint.com/how-can-we-clear-all-selections-in-java-swing-jlist]
-            rechnungen.clearSelection();
+            rechnungen0.clearSelection();
         });
 
         //Live Updater des lösungsfeld [Quelle:https://stackoverflow.com/questions/3953208/value-change-listener-to-jtextfield]
@@ -1154,7 +1153,7 @@ public class gui implements ActionListener {
                     case KeyEvent.VK_DELETE -> {
                         int a = JOptionPane.showConfirmDialog(jmain, "Clear List?");
                         if (a == JOptionPane.YES_OPTION) {
-                            DefaultListModel<String> listModel = (DefaultListModel<String>) rechnungen.getModel();
+                            DefaultListModel<String> listModel = (DefaultListModel<String>) rechnungen0.getModel();
                             listModel.removeAllElements();
                         }
                     }
