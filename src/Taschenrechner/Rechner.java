@@ -30,15 +30,34 @@ public class Rechner {
     }
 
     //Die Methode die den Input von der input Methode aufnimmt und diesen an den rechner weitergibt
-    public double rechnerstarten(String Rechnung) throws Exception {
+    public double rechnerstarten(String rechnung) throws Exception {
         //Betrag Quelle zu matches [Quelle:https://www.tutorialspoint.com/java/java_string_matches.htm]
-        if(Rechnung.contains("|")){
-            Rechnung = Rechnung.replaceAll("\\|","");
-            double db = calcKlammern(inputueberpruefen(Rechnung));
+        if(rechnung.contains("|")){
+            rechnung = rechnung.replaceAll("\\|","");
+            double db = calcKlammern(inputueberpruefen(rechnung));
             db = Double.parseDouble(String.valueOf(db).replaceAll("-",""));
             return db;
         }
-        return calcKlammern(inputueberpruefen(Rechnung));
+        return calcKlammern(inputueberpruefen(rechnung));
+    }
+
+    public double rechnerstarten(String rechnung, ArrayList<String> liste) throws Exception {
+        for(int i = 0; i < liste.toArray().length; i++){
+            String str = liste.get(i);
+            if(str.contains("=")) {
+                int klammer = str.indexOf("=");
+                String Variablen = str.substring(0, klammer);
+                String Wert = str.substring(klammer + 1);
+                rechnung = rechnung.replaceAll(Variablen, Wert);
+            }
+        }
+        if(rechnung.contains("|")){
+            rechnung = rechnung.replaceAll("\\|","");
+            double db = calcKlammern(inputueberpruefen(rechnung));
+            db = Double.parseDouble(String.valueOf(db).replaceAll("-",""));
+            return db;
+        }
+        return calcKlammern(inputueberpruefen(rechnung));
     }
 
     private double calcKlammern(String str) throws Exception {
@@ -58,7 +77,7 @@ public class Rechner {
                 if (operator != -1) {
                     operatorTest = false;
                     parts[0] = parts[0].substring(0, parts[0].length() - 3);
-                    parts[1] = String.valueOf(calc2(Double.valueOf(parts[1]), operator));
+                    parts[1] = String.valueOf(calc2(Double.parseDouble(parts[1]), operator));
                 }
             }
             if (operatorTest) {
@@ -69,7 +88,7 @@ public class Rechner {
                     switch (operator) {
                         case OPERATOR_POW -> {
                             parts[0] = parts[0].substring(0, parts[0].length() - 1);
-                            parts[1] = String.valueOf(calc2(Double.valueOf(parts[1]), operator));
+                            parts[1] = String.valueOf(calc2(Double.parseDouble(parts[1]), operator));
                         }
                     }
                 }
@@ -143,7 +162,7 @@ public class Rechner {
             parts.add(String.valueOf(str.charAt(posEnd)));
             str = str.substring(posEnd + 1);
         }
-        if (parts.size() < 3) return Double.valueOf(str);
+        if (parts.size() < 3) return Double.parseDouble(str);
         while (true) {
             boolean pointFound = false;
             for (int i = 1; i < parts.size(); i += 2) {
@@ -151,7 +170,7 @@ public class Rechner {
                 if (operator == -1) throw new Exception("Wrong operator: " + str);
                 if (operator == OPERATOR_MULTIPLY || operator == OPERATOR_DIVIDE || operator == OPERATOR_POW) {
                     pointFound = true;
-                    parts.set(i - 1, String.valueOf(calc(Double.valueOf(parts.get(i - 1)), Double.valueOf(parts.get(i + 1)), operator)));
+                    parts.set(i - 1, String.valueOf(calc(Double.parseDouble(parts.get(i - 1)), Double.parseDouble(parts.get(i + 1)), operator)));
                     parts.remove(i);
                     parts.remove(i);
                     break;
@@ -159,9 +178,9 @@ public class Rechner {
             }
             if (!pointFound) break;
         }
-        double retVal = Double.valueOf(parts.get(0));
+        double retVal = Double.parseDouble(parts.get(0));
         for (int i = 1; i < parts.size(); i += 2)
-            retVal = calc(retVal, Double.valueOf(parts.get(i + 1)), getOperator(parts.get(i)));
+            retVal = calc(retVal, Double.parseDouble(parts.get(i + 1)), getOperator(parts.get(i)));
         return retVal;
     }
 

@@ -1,6 +1,7 @@
 package Taschenrechner;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -8,11 +9,9 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class gui implements ActionListener {
 
@@ -23,6 +22,8 @@ public class gui implements ActionListener {
     //Methode zum Überschreiben
     public void actionPerformed(ActionEvent ae) {
     }
+
+    static private ArrayList<String> Variablen = new ArrayList<>();
 
     public static void main(String[] args) {
         //Taschenrechner.Rechner als Objekt anlegen
@@ -66,7 +67,12 @@ public class gui implements ActionListener {
         JLabel label = new JLabel("Letzte Rechnungen:");
 
         //Textfeld welches den Userinput zeigt [Quelle:https://www.geeksforgeeks.org/java-swing-jtextfield/]
-        final JTextField textFeld = new JTextField(1);
+        final JTextField textFeld = new JTextField(1){
+            //Remove Border [Quelle:https://stackoverflow.com/a/2281980]
+            @Override public void setBorder(Border border) {
+                // No!
+            }
+        };
         //Setzt den Cursor automatisch in das Textfeld, der User muss es nicht mehr auswählen [Quelle:https://stackoverflow.com/questions/18908902/set-cursor-on-a-jtextfield]
         textFeld.requestFocusInWindow();
 
@@ -613,7 +619,6 @@ public class gui implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
-        gbc.weightx = 1.0;
         p1.add(n20, gbc);
         n20.addActionListener(e -> {
             String num1 = "0";
@@ -660,8 +665,12 @@ public class gui implements ActionListener {
         p1.add(n23, gbc);
         n23.addActionListener(e -> {
             try {
-                //Taschenrechner.Rechner aufrufen
-                String s = String.valueOf(prechner.rechnerstarten(textFeld.getText()));
+                String s;
+                if (!Variablen.isEmpty()) {
+                    s = String.valueOf(prechner.rechnerstarten(textFeld.getText(), Variablen));
+                } else {
+                    s = String.valueOf(prechner.rechnerstarten(textFeld.getText()));
+                }
                 //Wenn es keine Nachkommastellen gibt werden das Komma und die 0 entfernt
                 //[Quelle:https://www.javatpoint.com/java-string-endswith]
                 if (s.endsWith(".0")) {
@@ -856,201 +865,109 @@ public class gui implements ActionListener {
             textFeld.setCaretPosition(j + 1);
         });
 
-        // Konstanten
-        Icon n35ic = new ImageIcon("ressource/icons/Konstanten.png");
-        // Icon X
-        Icon n35ic2 = new ImageIcon("ressource/icons/x.png");
-        final JToggleButton n35 = new JToggleButton(n35ic);
-        n35.setSelectedIcon(n35ic2);
+        // Variablen
+        Icon n35ic = new ImageIcon("ressource/icons/Variablen.png");
+        final JButton n35 = new JButton(n35ic);
         gbc.gridx = 2;
         gbc.gridy = 0;
         p2.add(n35, gbc);
 
-        //
-        Icon n36ic = new ImageIcon("ressource/icons/empty.png");
-        final JButton n36 = new JButton(n36ic);
+        /*
+            Variablen Feld
+         */
+        DefaultListModel<String> model1 = new DefaultListModel<>();
+        final JList<String> variablen = new JList<>(model1);
+        variablen.setLayoutOrientation(JList.VERTICAL);
+        //Hintergrundfarbe
+        variablen.setBackground(Color.decode("#999999"));
+        //Textfarbe
+        variablen.setForeground(Color.WHITE);
+        //Text in die mitte [Quelle:https://stackoverflow.com/a/21029761]
+        DefaultListCellRenderer renderer =  (DefaultListCellRenderer)variablen.getCellRenderer();
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+
+        //Die Liste scrollbar machen
+        JScrollPane scrollPaneRechnungen1 = new JScrollPane();
+        scrollPaneRechnungen1.setViewportView(rechnungen);
+        scrollPaneRechnungen1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPaneRechnungen1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+
+        //Liste
         gbc.gridx = 2;
         gbc.gridy = 1;
-        p2.add(n36, gbc);
-        n36.addActionListener(e -> {
+        gbc.gridheight = 3;
+        p2.add(variablen, gbc);
+        //n37
+
+        //n38
+        //[Quelle:https://www.dummies.com/programming/java/how-to-use-layout-managers-in-java/]
+        JPanel variablenerstellen = new JPanel();
+        variablenerstellen.setBackground(Color.decode("#999999"));
+        //WrapLayout [Quelle:https://tips4java.wordpress.com/2008/11/06/wrap-layout/]
+        variablenerstellen.setLayout(new WrapLayout());
+
+        //Textfelder für die Variablen erstellen
+        JTextField n36 = new JTextField(){
+            //Border entfernen[Quelle:https://stackoverflow.com/a/2281980]
+            @Override public void setBorder(Border border) {
+                // No!
+            }
+        };
+        //Text der Textfelds in die Mitte [Quelle(kein https!):http://www.java2s.com/Code/Java/Swing-JFC/AligningtheTextinaJTextFieldComponent.htm]
+        n36.setHorizontalAlignment(JTextField.CENTER);
+        n36.setOpaque(false);
+        n36.setForeground(Color.WHITE);
+        JLabel n36ic = new JLabel(new ImageIcon("ressource/icons/round.png"));
+        n36ic.setLayout( new BorderLayout() );
+        n36ic.add(n36);
+        variablenerstellen.add(n36ic);
+
+        //Variablen Speichern Knopf
+        Icon n37ic = new ImageIcon("ressource/icons/+round.png");
+        JButton n37 = new JButton(n37ic);
+        variablenerstellen.add(n37);
+        n37.addActionListener(actionEvent -> {
+            String str = n36.getText();
+            if(!str.equals("")) {
+                n37.setIcon(new ImageIcon("ressource/icons/+round.png"));
+                if (!str.contains("=")) {
+                    str = str + "=0";
+                }
+                model1.addElement(str);
+                n36.setText("");
+                Variablen.add(str);
+                textFeld.setText(textFeld.getText());
+            }
+            else {
+                n37.setIcon(new ImageIcon("ressource/icons/+roundred.png"));
+            }
         });
 
-        //
-        Icon n37ic = new ImageIcon("ressource/icons/empty.png");
-        final JButton n37 = new JButton(n37ic);
-        gbc.gridx = 2;
-        gbc.gridy = 2;
-        p2.add(n37, gbc);
-        n37.addActionListener(e -> {
-        });
-
-        //
-        Icon n38ic = new ImageIcon("ressource/icons/empty.png");
-        final JButton n38 = new JButton(n38ic);
-        gbc.gridx = 2;
-        gbc.gridy = 3;
-        p2.add(n38, gbc);
-        n38.addActionListener(e -> {
-        });
-
-        //
-        Icon n39ic = new ImageIcon("ressource/icons/empty.png");
-        final JButton n39 = new JButton(n39ic);
         gbc.gridx = 2;
         gbc.gridy = 4;
-        p2.add(n39, gbc);
-        n39.addActionListener(e -> {
-        });
+        gbc.weighty = 1;
+        p2.add(variablenerstellen, gbc);
 
         /*
             Konstanten
          */
+        model1.addElement("e");
+        //Eulersche Zahl
 
-        //e
-        Icon n40ic = new ImageIcon("ressource/icons/e.png");
-        final JButton n40 = new JButton(n40ic);
-        n40.setToolTipText("Eulersche Zahl");
-        n40.addActionListener(e -> {
-            String num1 = "e";
-            String global = textFeld.getText();
-            int j = textFeld.getCaretPosition();
-            global = global.substring(0, j) + num1 + global.substring(j);
-            textFeld.setText(global);
-            textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(j + 1);
-        });
+        model1.addElement("φ");
+        //Goldener Schnitt
 
-        //φ
-        Icon n41ic = new ImageIcon("ressource/icons/φ.png");
-        final JButton n41 = new JButton(n41ic);
-        n41.setToolTipText("Goldener Schnitt");
-        n41.addActionListener(e -> {
-            String num1 = "φ";
-            String global = textFeld.getText();
-            int j = textFeld.getCaretPosition();
-            global = global.substring(0, j) + num1 + global.substring(j);
-            textFeld.setText(global);
-            textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(j + 1);
-        });
+        model1.addElement("π");
+        //pi
+        model1.addElement("θ");
+        //Mills-Konstante
 
-        //π
-        Icon n42ic = new ImageIcon("ressource/icons/π.png");
-        final JButton n42 = new JButton(n42ic);
-        n42.setToolTipText("pi");
-        n42.addActionListener(e -> {
-            String num1 = "π";
-            String global = textFeld.getText();
-            int j = textFeld.getCaretPosition();
-            global = global.substring(0, j) + num1 + global.substring(j);
-            textFeld.setText(global);
-            textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(j + 1);
-        });
+        model1.addElement("γ");
+        //Euler-Masch-Konstante
 
-        //θ
-        Icon n43ic = new ImageIcon("ressource/icons/θ.png");
-        final JButton n43 = new JButton(n43ic);
-        n43.setToolTipText("Mills-Konstante");
-        n43.addActionListener(e -> {
-            String num1 = "θ";
-            String global = textFeld.getText();
-            int j = textFeld.getCaretPosition();
-            global = global.substring(0, j) + num1 + global.substring(j);
-            textFeld.setText(global);
-            textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(j + 1);
-        });
-
-        //γ
-        Icon n44ic = new ImageIcon("ressource/icons/γ.png");
-        final JButton n44 = new JButton(n44ic);
-        n44.setToolTipText("Euler-Masch-Konstante");
-        n44.addActionListener(e -> {
-            String num1 = "γ";
-            String global = textFeld.getText();
-            int j = textFeld.getCaretPosition();
-            global = global.substring(0, j) + num1 + global.substring(j);
-            textFeld.setText(global);
-            textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(j + 1);
-        });
-
-        //λ
-        Icon n45ic = new ImageIcon("ressource/icons/λ.png");
-        final JButton n45 = new JButton(n45ic);
-        n45.setToolTipText("Golomb-Dickman-Konstante");
-        n45.addActionListener(e -> {
-            String num1 = "λ";
-            String global = textFeld.getText();
-            int j = textFeld.getCaretPosition();
-            global = global.substring(0, j) + num1 + global.substring(j);
-            textFeld.setText(global);
-            textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(j + 1);
-        });
-
-        /*
-           Gibt dem Konstanten Knopf seine Fukntion die Buttons zu tauschen
-         */
-        n35.addActionListener(e -> {
-            if(n35.isSelected()) {
-                //Ersetzt die Knöpfe [Quelle:https://stackoverflow.com/a/11097167]
-                gbc.gridx = 1;
-                gbc.gridy = 1;
-                p2.remove(n31);
-                p2.add(n40, gbc);
-                gbc.gridy = 2;
-                p2.remove(n32);
-                p2.add(n41, gbc);
-                gbc.gridy = 3;
-                p2.remove(n33);
-                p2.add(n42, gbc);
-
-                gbc.gridx = 2;
-                gbc.gridy = 1;
-                p2.remove(n36);
-                p2.add(n43, gbc);
-                gbc.gridy = 2;
-                p2.remove(n37);
-                p2.add(n44, gbc);
-                gbc.gridy = 3;
-                p2.remove(n38);
-                p2.add(n45, gbc);
-
-                p2.revalidate();
-                p2.repaint();
-            }
-            else if(!n35.isSelected()){
-                gbc.gridx = 1;
-                gbc.gridy = 1;
-                p2.remove(n40);
-                p2.add(n31, gbc);
-                gbc.gridy = 2;
-                p2.remove(n41);
-                p2.add(n32, gbc);
-                gbc.gridy = 3;
-                p2.remove(n42);
-                p2.add(n33, gbc);
-
-                gbc.gridx = 2;
-                gbc.gridy = 1;
-                p2.remove(n43);
-                p2.add(n36, gbc);
-                gbc.gridy = 2;
-                p2.remove(n44);
-                p2.add(n37, gbc);
-                gbc.gridy = 3;
-                p2.remove(n45);
-                p2.add(n38, gbc);
-
-                //Konstanten Knopf
-                n35.setIcon(n35ic);
-
-                p2.revalidate();
-                p2.repaint();
-            }
-        });
+        model1.addElement("λ");
+        //Golomb-Dickman-Konstante
 
         /*
 				Methode welche wenn auf ein Eintrag in der Liste ergebnisse geklickt wird, das Ergebnis
@@ -1093,7 +1010,12 @@ public class gui implements ActionListener {
                     n23.setEnabled(true);
                     loesung.setBackground(Color.WHITE);
                     //Taschenrechner.Rechner aufrufen
-                    String s = String.valueOf(prechner.rechnerstarten(textFeld.getText()));
+                    String s;
+                    if (!Variablen.isEmpty()) {
+                        s = String.valueOf(prechner.rechnerstarten(textFeld.getText(), Variablen));
+                    } else {
+                        s = String.valueOf(prechner.rechnerstarten(textFeld.getText()));
+                    }
                     //Wenn es keine Nachkommastellen gibt werden das Komma und die 0 entfernt
                     //[Quelle:https://www.javatpoint.com/java-string-endswith]
                     if (s.endsWith(".0")) {
@@ -1168,16 +1090,8 @@ public class gui implements ActionListener {
         n33.setBorderPainted(false);
         n34.setBorderPainted(false);
         n35.setBorderPainted(false);
-        n36.setBorderPainted(false);
+        //n36
         n37.setBorderPainted(false);
-        n38.setBorderPainted(false);
-        n39.setBorderPainted(false);
-        n40.setBorderPainted(false);
-        n41.setBorderPainted(false);
-        n42.setBorderPainted(false);
-        n43.setBorderPainted(false);
-        n44.setBorderPainted(false);
-        n45.setBorderPainted(false);
 
         //Hintergrund entfernen
         n0.setContentAreaFilled(false);
@@ -1217,18 +1131,10 @@ public class gui implements ActionListener {
         n33.setContentAreaFilled(false);
         n34.setContentAreaFilled(false);
         n35.setContentAreaFilled(false);
-        n36.setContentAreaFilled(false);
+        //n36
         n37.setContentAreaFilled(false);
-        n38.setContentAreaFilled(false);
-        n39.setContentAreaFilled(false);
-        n40.setContentAreaFilled(false);
-        n41.setContentAreaFilled(false);
-        n42.setContentAreaFilled(false);
-        n43.setContentAreaFilled(false);
-        n44.setContentAreaFilled(false);
-        n45.setContentAreaFilled(false);
 
-        //Keylistener der bestimmte Sachen macht wenn eine bestimmt Taste kopiert wird
+        //Keylistener der bestimmte Sachen macht wenn eine bestimmte Taste gedrückt wird
         textFeld.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent keyEvent) {
@@ -1245,14 +1151,36 @@ public class gui implements ActionListener {
                         }
                     }
                     case KeyEvent.VK_ENTER -> n23.doClick();
+                    case KeyEvent.VK_DELETE -> {
+                        int a = JOptionPane.showConfirmDialog(jmain, "Clear List?");
+                        if (a == JOptionPane.YES_OPTION) {
+                            DefaultListModel<String> listModel = (DefaultListModel<String>) rechnungen.getModel();
+                            listModel.removeAllElements();
+                        }
+                    }
+                    case KeyEvent.VK_INSERT -> {
+                        System.out.println("1213");
+                        try {
+                            String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+                            String global = textFeld.getText();
+                            int j = textFeld.getCaretPosition();
+                            global = global.substring(0, j) + data + global.substring(j);
+                            textFeld.setText(global);
+                            textFeld.requestFocusInWindow();
+                            textFeld.setCaretPosition(j + 1);
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(jmain, "[Error]Clipboard");
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
 
             @Override
             public void keyReleased(KeyEvent keyEvent) {
             }
-
         });
+
         //Splitpane 4 Normal Knöpfe und Erweitern
         //Splitpane 4 wurde bereits vorher definiert
 			/*
