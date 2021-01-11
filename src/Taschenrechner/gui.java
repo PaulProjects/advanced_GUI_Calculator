@@ -55,12 +55,15 @@ public class gui implements ActionListener {
         final JList<String> rechnungen0 = new JList<>(model0);
         //Hintergrundfarbe
         rechnungen0.setBackground(Color.WHITE);
+        //Border weg
 
         //Die Liste scrollbar machen
         JScrollPane scrollPaneRechnungen = new JScrollPane();
         scrollPaneRechnungen.setViewportView(rechnungen0);
         scrollPaneRechnungen.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRechnungen.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        //Border entfernen [Quelle:https://stackoverflow.com/a/18613090]
+        scrollPaneRechnungen.setBorder(null);
 
         //Label welches den Titel der Liste trägt
         JLabel label = new JLabel("Letzte Rechnungen:");
@@ -968,24 +971,6 @@ public class gui implements ActionListener {
         model1.addElement("λ");
         //Golomb-Dickman-Konstante
 
-        /*
-				Methode welche wenn auf ein Eintrag in der Liste ergebnisse geklickt wird, das Ergebnis
-				dieser Rechnung in das Rechenfeld einfügt.
-		*/
-        //Listen clickevent [Quelle:https://docs.oracle.com/javase/tutorial/uiswing/events/listselectionlistener.html]
-        rechnungen0.addListSelectionListener(listSelectionEvent -> {
-            //Das Feld welches angeklickt wird wird in str gespeichert [Quelle:https://stackoverflow.com/questions/28852864/get-the-selected-values-from-jlist-in-java]
-            String str = String.valueOf(rechnungen0.getSelectedValue());
-            //Fall der Benutzer ein leeres Feld anklickt
-            str = str.replaceAll("null", "");
-            //Nur das Ergebnis wird benötigt [Quelle:https://stackoverflow.com/questions/16741274/java-extract-characters-after-a-specific-character]
-            str = str.substring(str.lastIndexOf("=") + 1);
-            //Das Ergebnis wird in das TextFeld eingefügt
-            textFeld.setText(textFeld.getText() + str);
-            //Auswahl wird rückgängig gemacht [Quelle:https://www.tutorialspoint.com/how-can-we-clear-all-selections-in-java-swing-jlist]
-            rechnungen0.clearSelection();
-        });
-
         //Live Updater des lösungsfeld [Quelle:https://stackoverflow.com/questions/3953208/value-change-listener-to-jtextfield]
         textFeld.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -1052,6 +1037,47 @@ public class gui implements ActionListener {
             }
         });
 
+        /*
+            Remove und Insert Knöpfe für die beiden Listen
+         */
+        //Die Icons
+        Icon ninsertic = new ImageIcon("ressource/icons/insert.png");
+        Icon nremoveic = new ImageIcon("ressource/icons/remove.png");
+
+        //Die Knöpfe für die rechnungen liste
+        JPanel rechnungenaction = new JPanel();
+        rechnungenaction.setBackground(Color.WHITE);
+        //WrapLayout [Quelle:https://tips4java.wordpress.com/2008/11/06/wrap-layout/]
+        rechnungenaction.setLayout(new BorderLayout());
+        //Icons für die insert und remove knöpfe der Listen
+
+        JButton nrechnungeninsert = new JButton(ninsertic);
+        rechnungenaction.add(nrechnungeninsert,BorderLayout.WEST);
+        nrechnungeninsert.addActionListener(actionEvent -> {
+            String str = rechnungen0.getSelectedValue();
+            if(str==null) str = "";
+            //Nur das Ergebnis wird benötigt [Quelle:https://stackoverflow.com/questions/16741274/java-extract-characters-after-a-specific-character]
+            str = str.substring(str.lastIndexOf("=") + 1);
+            String global = textFeld.getText();
+            int j = textFeld.getCaretPosition();
+            global = global.substring(0, j) + str + global.substring(j);
+            //Cursor hinter das Eingefügt setzen
+            textFeld.setText(global);
+            textFeld.requestFocusInWindow();
+            textFeld.setCaretPosition(j + str.length());
+            //Auswahl wird rückgängig gemacht [Quelle:https://www.tutorialspoint.com/how-can-we-clear-all-selections-in-java-swing-jlist]
+            rechnungen0.clearSelection();
+        });
+
+        JButton nrechnungenremove = new JButton(nremoveic);
+        rechnungenaction.add(nrechnungenremove,BorderLayout.EAST);
+        nrechnungenremove.addActionListener(actionEvent -> {
+            int index = rechnungen0.getSelectedIndex();
+            if (index >= 0) {
+                model0.remove(0);
+            }
+        });
+
         //Rand entfernen [Quelle:https://stackoverflow.com/questions/8367500/how-to-hide-background-of-jbutton-which-containt-icon-image]
         n0.setBorderPainted(false);
         n1.setBorderPainted(false);
@@ -1091,6 +1117,9 @@ public class gui implements ActionListener {
         n35.setBorderPainted(false);
         //n36
         n37.setBorderPainted(false);
+
+        nrechnungeninsert.setBorderPainted(false);
+        nrechnungenremove.setBorderPainted(false);
 
         //Hintergrund entfernen
         n0.setContentAreaFilled(false);
@@ -1132,6 +1161,9 @@ public class gui implements ActionListener {
         n35.setContentAreaFilled(false);
         //n36
         n37.setContentAreaFilled(false);
+
+        nrechnungeninsert.setContentAreaFilled(false);
+        nrechnungenremove.setContentAreaFilled(false);
 
         //Keylistener der bestimmte Sachen macht wenn eine bestimmte Taste gedrückt wird
         textFeld.addKeyListener(new KeyListener() {
@@ -1179,6 +1211,11 @@ public class gui implements ActionListener {
             public void keyReleased(KeyEvent keyEvent) {
             }
         });
+        //Splitpane 5 für die Insert und Remove knöpfe der rechnungs Liste
+        JSplitPane splitpane5 = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        splitpane5.setTopComponent(rechnungenaction);
+        splitpane5.setBottomComponent(scrollPaneRechnungen);
+        splitpane5.setDividerSize(0);
 
         //Splitpane 4 Normal Knöpfe und Erweitern
         //Splitpane 4 wurde bereits vorher definiert
@@ -1216,7 +1253,7 @@ public class gui implements ActionListener {
 				-------------------
 				Liste der Rechnungen
 			 */
-        splitpane2.setBottomComponent(scrollPaneRechnungen);
+        splitpane2.setBottomComponent(splitpane5);
         splitpane2.setTopComponent(splitpane3);
         splitpane2.setDividerSize(0);
 
@@ -1229,6 +1266,7 @@ public class gui implements ActionListener {
         splitpane.setLeftComponent(splitpane2);
         splitpane.setRightComponent(splitpane4);
         splitpane.setDividerSize(0);
+        splitpane.setDividerLocation(180);
 
         c.add(splitpane, BorderLayout.CENTER);
         //Menüleiste hinzufügen
