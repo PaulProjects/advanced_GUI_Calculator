@@ -23,14 +23,14 @@ public class gui implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
     }
 
-    static private ArrayList<String> Variablen = new ArrayList<>();
+    static private final ArrayList<String> Variablen = new ArrayList<>();
 
     public static void main(String[] args) {
         //Taschenrechner.Rechner als Objekt anlegen
         Rechner prechner = new Rechner();
 
         //Erzeugung des Panels auf dem der Taschenrechner.Rechner und die Liste sitzen werden
-        JFrame jmain = new JFrame("Pauls Taschenrechner.Rechner");
+        JFrame jmain = new JFrame("Pauls Taschenrechner");
         Container c = jmain.getContentPane();
         //Fenster kann nicht kleiner/größer gemacht werden
         //Löst Probleme mit Resizing etc.
@@ -168,8 +168,8 @@ public class gui implements ActionListener {
                 basicmenuitem.setState(true);
             }
             erweitertmenuitem.setState(false);
+
             jmain.setSize(850, 850);
-            splitpane4.setDividerLocation(900);
         });
 
         erweitertmenuitem.addActionListener(actionEvent -> {
@@ -545,32 +545,13 @@ public class gui implements ActionListener {
         gbc.gridy = 3;
         p1.add(n18, gbc);
         n18.addActionListener(e -> {
-            //Pop up Window zum Lösen von Rechnung
-            String wurzelterm = JOptionPane.showInputDialog(jmain, "Wurzel ziehen von?", null);
-            try {
-                //Taschenrechner.Rechner aufrufen
-                Double s = prechner.rechnerstarten(wurzelterm);
-                s = Math.sqrt(s);
-                //Wenn es keine Nachkommastellen gibt werden das Komma und die 0 entfernt
-                String sstr = String.valueOf(String.valueOf(s));
-                if (sstr.endsWith(".0")) {
-                    //Löscht die letzten 2 Zeichen[Quelle:https://stackoverflow.com/questions/30708036/delete-the-last-two-characters-of-the-string]
-                    sstr = sstr.substring(0, sstr.length() - 2);
-                }
-                //Ergebnis der Liste hinzufügen
-                model0.addElement("√" + wurzelterm + "=" + sstr);
-                //Ergebnis in textFeld setzen
-                int j = textFeld.getCaretPosition();
-                String global = textFeld.getText();
-                global = global.substring(0, j) + sstr + global.substring(j);
-                textFeld.setText(global);
-                textFeld.requestFocusInWindow();
-                textFeld.setCaretPosition(j + sstr.length());
-            } catch (Exception d) {
-                textFeld.setText("[ERROR] " + d.getMessage());
-                textFeld.setBackground(Color.red);
-            }
-
+            String num1 = "√";
+            String global = textFeld.getText();
+            int j = textFeld.getCaretPosition();
+            global = global.substring(0, j) + num1 + global.substring(j);
+            textFeld.setText(global);
+            textFeld.requestFocusInWindow();
+            textFeld.setCaretPosition(j + 1);
         });
 
         // ^
@@ -909,7 +890,7 @@ public class gui implements ActionListener {
         n36.setOpaque(false);
         n36.setForeground(Color.WHITE);
         JLabel n36ic = new JLabel(new ImageIcon("ressource/icons/round.png"));
-        n36ic.setLayout( new BorderLayout() );
+        n36ic.setLayout(new BorderLayout());
         n36ic.add(n36);
         variablenerstellen.add(n36ic);
 
@@ -984,7 +965,7 @@ public class gui implements ActionListener {
         nvariablenremove.addActionListener(actionEvent -> {
             int index = variablen.getSelectedIndex();
             if (index >= 0) {
-                model1.remove(0);
+                model1.remove(index);
             }
         });
 
@@ -1131,7 +1112,7 @@ public class gui implements ActionListener {
         nrechnungenremove.addActionListener(actionEvent -> {
             int index = rechnungen0.getSelectedIndex();
             if (index >= 0) {
-                model0.remove(0);
+                model0.remove(index);
             }
         });
 
