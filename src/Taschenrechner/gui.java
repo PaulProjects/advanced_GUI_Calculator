@@ -183,38 +183,6 @@ public class gui implements ActionListener {
             splitpane4.setDividerLocation(jmain.getSize().width - 300);
         });
 
-				/*
-				Gibt Fenstergröße aus
-				 */
-				/*
-				jmain.addComponentListener(new ComponentListener() {
-					@Override
-					public void componentResized(ComponentEvent componentEvent) {
-						Rectangle r = jmain.getBounds();
-						System.out.println(r.height);
-						System.out.println(r.width);
-					}
-
-					@Override
-					public void componentMoved(ComponentEvent componentEvent) {
-					}
-
-					@Override
-					public void componentShown(ComponentEvent componentEvent) {
-					}
-
-					@Override
-					public void componentHidden(ComponentEvent componentEvent) {
-					}
-				});
-				*/
-				/*
-					Knöpfe
-				 */
-        		/*
-				Modus wechsler [Quelle:https://stackoverflow.com/a/30702197]
-				 */
-
         //Menü um zwischen Dark und Light mode umzuschalten
         /*JMenu lookmenu = new JMenu("Aussehen");
         JCheckBoxMenuItem whitemi = new JCheckBoxMenuItem("Hell");
@@ -282,6 +250,7 @@ public class gui implements ActionListener {
         //AC
         Icon n0ic = new ImageIcon("ressource/icons/AC.png");
         final JButton n0 = new JButton(n0ic);
+        n0.setToolTipText("Alles im Feld löschen");
         //Gridbag layout setzen [Quelle:https://www.tutorialspoint.com/swing/swing_gridbaglayout.htm]
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -335,6 +304,7 @@ public class gui implements ActionListener {
         // .
         Icon n3ic = new ImageIcon("ressource/icons/..png");
         final JButton n3 = new JButton(n3ic);
+        n3.setToolTipText("Komma");
         gbc.gridx = 3;
         gbc.gridy = 0;
         p1.add(n3, gbc);
@@ -351,6 +321,7 @@ public class gui implements ActionListener {
         // esc
         Icon n4ic = new ImageIcon("ressource/icons/esc.png");
         final JButton n4 = new JButton(n4ic);
+        n4.setToolTipText("Programm verlassen");
         gbc.gridx = 4;
         gbc.gridy = 0;
         p1.add(n4, gbc);
@@ -407,6 +378,7 @@ public class gui implements ActionListener {
         //*
         Icon n8ic = new ImageIcon("ressource/icons/*.png");
         final JButton n8 = new JButton(n8ic);
+        n8.setToolTipText("Potenz");
         gbc.gridx = 3;
         gbc.gridy = 1;
         p1.add(n8, gbc);
@@ -423,6 +395,7 @@ public class gui implements ActionListener {
         // /
         Icon n9ic = new ImageIcon("ressource/icons/Division.png");
         final JButton n9 = new JButton(n9ic);
+        n9.setToolTipText("Division");
         gbc.gridx = 4;
         gbc.gridy = 1;
         p1.add(n9, gbc);
@@ -567,6 +540,7 @@ public class gui implements ActionListener {
         // √
         Icon n18ic = new ImageIcon("ressource/icons/√.png");
         final JButton n18 = new JButton(n18ic);
+        n18.setToolTipText("Wurzel");
         gbc.gridx = 3;
         gbc.gridy = 3;
         p1.add(n18, gbc);
@@ -602,6 +576,7 @@ public class gui implements ActionListener {
         // ^
         Icon n19ic = new ImageIcon("ressource/icons/^.png");
         final JButton n19 = new JButton(n19ic);
+        n19.setToolTipText("Potenz");
         gbc.gridx = 4;
         gbc.gridy = 3;
         p1.add(n19, gbc);
@@ -637,6 +612,7 @@ public class gui implements ActionListener {
         //C
         Icon n22ic = new ImageIcon("ressource/icons/C.png");
         final JButton n22 = new JButton(n22ic);
+        n22.setToolTipText("Entfernen");
         gbc.gridx = 2;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -661,6 +637,7 @@ public class gui implements ActionListener {
         //=
         Icon n23ic = new ImageIcon("ressource/icons/=.png");
         final JButton n23 = new JButton(n23ic);
+        n23.setToolTipText("Lösen");
         gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
@@ -712,10 +689,12 @@ public class gui implements ActionListener {
         //runden vor das Komma
         Icon n25ic = new ImageIcon("ressource/icons/rnd.png");
         final JButton n25 = new JButton(n25ic);
+        n25.setToolTipText("runden vor das Komma");
         gbc.gridx = 0;
         gbc.gridy = 0;
         p2.add(n25, gbc);
         n25.addActionListener(e -> {
+            //Erstmal die Rechnung lösen
             try {
                 double global = Double.parseDouble(textFeld.getText());
                 textFeld.setText(String.valueOf(Math.round(global)));
@@ -784,17 +763,23 @@ public class gui implements ActionListener {
         n29.addActionListener(e -> {
             int j = textFeld.getCaretPosition();
             textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(j - 1);
+            //Verhindert das der Cursor in das negative gesetzt wird und ein Error entsteht
+            if(j!=0) {
+                textFeld.setCaretPosition(j - 1);
+            }
         });
 
         //rnd 2
         //rundet auf die 2. Nachkommastelle [Quelle:https://java.soeinding.de/content.php/Runden_Auf_Kommastellen]
+        //lösen
         Icon n30ic = new ImageIcon("ressource/icons/rnd,x.png");
         final JButton n30 = new JButton(n30ic);
+        n30.setToolTipText("runden auf die 2. Nachkommastelle");
         gbc.gridx = 1;
         gbc.gridy = 0;
         p2.add(n30, gbc);
         n30.addActionListener(e -> {
+            n23.doClick();
             try {
                 double global = Double.parseDouble(textFeld.getText());
                 double value = Math.round(100.0 * global) / 100.0;
@@ -810,6 +795,8 @@ public class gui implements ActionListener {
         //sinh
         Icon n31ic = new ImageIcon("ressource/icons/sinh.png");
         final JButton n31 = new JButton(n31ic);
+        //[Quelle:https://de.wikipedia.org/wiki/Sinus_hyperbolicus_und_Kosinus_hyperbolicus]
+        n31.setToolTipText("Sinus hyperbolicus (Hyperbelfunktionen)");
         gbc.gridx = 1;
         gbc.gridy = 1;
         p2.add(n31, gbc);
@@ -826,6 +813,8 @@ public class gui implements ActionListener {
         //cosh
         Icon n32ic = new ImageIcon("ressource/icons/cosh.png");
         final JButton n32 = new JButton(n32ic);
+        //[Quelle:https://de.wikipedia.org/wiki/Sinus_hyperbolicus_und_Kosinus_hyperbolicus]
+        n32.setToolTipText("Kosinus hyperbolicus (Hyperbelfunktionen)");
         gbc.gridx = 1;
         gbc.gridy = 2;
         p2.add(n32, gbc);
@@ -842,6 +831,7 @@ public class gui implements ActionListener {
         //tanh
         Icon n33ic = new ImageIcon("ressource/icons/tanh.png");
         final JButton n33 = new JButton(n33ic);
+        n33.setToolTipText("Tangens hyperbolicus (Hyperbelfunktionen)");
         gbc.gridx = 1;
         gbc.gridy = 3;
         p2.add(n33, gbc);
@@ -864,15 +854,13 @@ public class gui implements ActionListener {
         n34.addActionListener(e -> {
             int j = textFeld.getCaretPosition();
             textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(j + 1);
+            //Verhindert den Cursor außerhalb des Textes zu setzen
+            if(j < textFeld.getText().length()) {
+                textFeld.setCaretPosition(j + 1);
+            }
         });
 
-        // Variablen
-        Icon n35ic = new ImageIcon("ressource/icons/Variablen.png");
-        final JButton n35 = new JButton(n35ic);
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        p2.add(n35, gbc);
+        //Variablen editieren kommt nach der Liste
 
         /*
             Variablen Feld
@@ -888,18 +876,18 @@ public class gui implements ActionListener {
         DefaultListCellRenderer renderer =  (DefaultListCellRenderer)variablen.getCellRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
 
-        //Die Liste scrollbar machen
+        //Die Liste scrollbar machen (Wird nicht benutzt im Moment!)
         JScrollPane scrollPaneRechnungen1 = new JScrollPane();
         scrollPaneRechnungen1.setViewportView(variablen);
         scrollPaneRechnungen1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRechnungen1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
 
         //Liste
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridheight = 3;
         p2.add(variablen, gbc);
+
         //n37
 
         //n38
@@ -928,6 +916,7 @@ public class gui implements ActionListener {
         //Variablen Speichern Knopf
         Icon n37ic = new ImageIcon("ressource/icons/+round.png");
         JButton n37 = new JButton(n37ic);
+        n37.setToolTipText("Variable speichern");
         variablenerstellen.add(n37);
         n37.addActionListener(actionEvent -> {
             String str = n36.getText();
@@ -950,6 +939,58 @@ public class gui implements ActionListener {
         gbc.gridy = 4;
         gbc.weighty = 1;
         p2.add(variablenerstellen, gbc);
+
+        //Die Variablen editier Knöpfe
+        /*
+            Variablen Liste rechts
+         */
+
+        Icon nredpillic = new ImageIcon("ressource/icons/redpill.png");
+        Icon ngreenpillic = new ImageIcon("ressource/icons/greenpill.png");
+
+        JPanel variablenaction = new JPanel();
+        variablenaction.setBackground(Color.decode("#999999"));
+        //WrapLayout [Quelle:https://tips4java.wordpress.com/2008/11/06/wrap-layout/]
+        variablenaction.setLayout(new WrapLayout());
+
+        JLabel variablenlabel = new JLabel("Variablen:");
+        variablenlabel.setForeground(Color.WHITE);
+        variablenlabel.setToolTipText("Variablen die alles eingegebene Überschreiben");
+        variablenaction.add(variablenlabel);
+
+
+        JButton nvariableninsert = new JButton(ngreenpillic);
+        nvariableninsert.setToolTipText("Variable in das Textfeld einfügen");
+        variablenaction.add(nvariableninsert);
+        nvariableninsert.addActionListener(actionEvent -> {
+            String str = variablen.getSelectedValue();
+            if(str==null) str = "";
+            //Nur das Ergebnis wird benötigt [Quelle:https://stackoverflow.com/questions/16741274/java-extract-characters-after-a-specific-character]
+            str = str.substring(str.lastIndexOf("=") + 1);
+            String global = textFeld.getText();
+            int j = textFeld.getCaretPosition();
+            global = global.substring(0, j) + str + global.substring(j);
+            //Cursor hinter das Eingefügt setzen
+            textFeld.setText(global);
+            textFeld.requestFocusInWindow();
+            textFeld.setCaretPosition(j + str.length());
+            //Auswahl wird rückgängig gemacht [Quelle:https://www.tutorialspoint.com/how-can-we-clear-all-selections-in-java-swing-jlist]
+            variablen.clearSelection();
+        });
+
+        JButton nvariablenremove = new JButton(nredpillic);
+        nvariablenremove.setToolTipText("Variable aus der Liste entfernen");
+        variablenaction.add(nvariablenremove);
+        nvariablenremove.addActionListener(actionEvent -> {
+            int index = variablen.getSelectedIndex();
+            if (index >= 0) {
+                model1.remove(0);
+            }
+        });
+
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        p2.add(variablenaction, gbc);
 
         /*
             Konstanten
@@ -1008,33 +1049,45 @@ public class gui implements ActionListener {
                     }
                     //Ergebnis in textFeld setzen
                     loesung.setText("Lösung:" + s);
-                } catch (Exception d) {
-                    //Deaktiviert den "=" Knopf da die Rechnung nicht möglich ist
-                    n23.setEnabled(false);
-                    String str = d.getMessage();
-                    if (d.getMessage().contains("String index out of range:"))
-                        str = "Fehlende Zahl";
-                    loesung.setText(str);
-                    loesung.setBackground(Color.red);
-                }
-                //Deaktiviert die Runden Funktion wenn mehr als nur ein int in der Rechenbox steht
-                //Schaut ob überhaupt ein Komma vorkommt [Quelle:https://www.javatpoint.com/java-string-contains]
-                if (textFeld.getText().contains(".")) {
-                    try {
-                        //Abwandlung von [Quelle:https://stackoverflow.com/a/5439547]
-                        Double.parseDouble(textFeld.getText());
-                        n25.setEnabled(true);
-                        n30.setEnabled(true);
-                    } catch (Exception e) {
+                    //Deaktiviert die Runden Funktion wenn mehr als nur ein int in der Rechenbox steht
+                    //Schaut ob überhaupt ein Komma vorkommt [Quelle:https://www.javatpoint.com/java-string-contains]
+                    if (s.contains(".")) {
+                        try {
+                            //Abwandlung von [Quelle:https://stackoverflow.com/a/5439547]
+                            Double.parseDouble(s);
+                            n25.setEnabled(true);
+                            n30.setEnabled(true);
+                        } catch (Exception e) {
+                            n25.setEnabled(false);
+                            n30.setEnabled(false);
+                        }
+                    }
+                    else{
                         n25.setEnabled(false);
                         n30.setEnabled(false);
                     }
-                } else {
-                    n25.setEnabled(false);
-                    n30.setEnabled(false);
-                }
 
-            }
+                    } catch(Exception d){
+                        //Deaktiviert den "=" Knopf da die Rechnung nicht möglich ist
+                        n23.setEnabled(false);
+                        String str = d.getMessage();
+                        if (d.getMessage().contains("String index out of range:"))
+                            str = "Fehlende Zahl";
+                        loesung.setText(str);
+                        loesung.setBackground(Color.red);
+                    if (textFeld.getText().contains(".")) {
+                        try {
+                            //Abwandlung von [Quelle:https://stackoverflow.com/a/5439547]
+                            Double.parseDouble(textFeld.getText());
+                            n25.setEnabled(true);
+                            n30.setEnabled(true);
+                        } catch (Exception e) {
+                            n25.setEnabled(false);
+                            n30.setEnabled(false);
+                        }
+                    }
+                    }
+                }
         });
 
         /*
@@ -1044,7 +1097,9 @@ public class gui implements ActionListener {
         Icon ninsertic = new ImageIcon("ressource/icons/insert.png");
         Icon nremoveic = new ImageIcon("ressource/icons/remove.png");
 
-        //Die Knöpfe für die rechnungen liste
+        /*
+            Rechner Liste Links
+         */
         JPanel rechnungenaction = new JPanel();
         rechnungenaction.setBackground(Color.WHITE);
         //WrapLayout [Quelle:https://tips4java.wordpress.com/2008/11/06/wrap-layout/]
@@ -1052,6 +1107,7 @@ public class gui implements ActionListener {
         //Icons für die insert und remove knöpfe der Listen
 
         JButton nrechnungeninsert = new JButton(ninsertic);
+        nrechnungeninsert.setToolTipText("In Textfeld einfügen");
         rechnungenaction.add(nrechnungeninsert,BorderLayout.WEST);
         nrechnungeninsert.addActionListener(actionEvent -> {
             String str = rechnungen0.getSelectedValue();
@@ -1070,6 +1126,7 @@ public class gui implements ActionListener {
         });
 
         JButton nrechnungenremove = new JButton(nremoveic);
+        nrechnungenremove.setToolTipText("Rechnung entfernen");
         rechnungenaction.add(nrechnungenremove,BorderLayout.EAST);
         nrechnungenremove.addActionListener(actionEvent -> {
             int index = rechnungen0.getSelectedIndex();
@@ -1114,12 +1171,14 @@ public class gui implements ActionListener {
         n32.setBorderPainted(false);
         n33.setBorderPainted(false);
         n34.setBorderPainted(false);
-        n35.setBorderPainted(false);
         //n36
         n37.setBorderPainted(false);
 
         nrechnungeninsert.setBorderPainted(false);
         nrechnungenremove.setBorderPainted(false);
+
+        nvariableninsert.setBorderPainted(false);
+        nvariablenremove.setBorderPainted(false);
 
         //Hintergrund entfernen
         n0.setContentAreaFilled(false);
@@ -1158,12 +1217,14 @@ public class gui implements ActionListener {
         n32.setContentAreaFilled(false);
         n33.setContentAreaFilled(false);
         n34.setContentAreaFilled(false);
-        n35.setContentAreaFilled(false);
         //n36
         n37.setContentAreaFilled(false);
 
         nrechnungeninsert.setContentAreaFilled(false);
         nrechnungenremove.setContentAreaFilled(false);
+
+        nvariableninsert.setContentAreaFilled(false);
+        nvariablenremove.setContentAreaFilled(false);
 
         //Keylistener der bestimmte Sachen macht wenn eine bestimmte Taste gedrückt wird
         textFeld.addKeyListener(new KeyListener() {
@@ -1211,7 +1272,13 @@ public class gui implements ActionListener {
             public void keyReleased(KeyEvent keyEvent) {
             }
         });
+
         //Splitpane 5 für die Insert und Remove knöpfe der rechnungs Liste
+            /*
+                Rechner Action Knöpfe
+                ---------------------
+                Rechnungen Liste
+             */
         JSplitPane splitpane5 = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         splitpane5.setTopComponent(rechnungenaction);
         splitpane5.setBottomComponent(scrollPaneRechnungen);
