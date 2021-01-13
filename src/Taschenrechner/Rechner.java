@@ -31,16 +31,9 @@ public class Rechner {
 
     //Die Methode die den Input von der input Methode aufnimmt und diesen an den rechner weitergibt
     public double rechnerstarten(String rechnung) throws Exception {
-        //Betrag Quelle zu matches [Quelle:https://www.tutorialspoint.com/java/java_string_matches.htm]
-        if(rechnung.contains("|")){
-            rechnung = rechnung.replaceAll("\\|","");
-            double db = calcKlammern(inputueberpruefen(rechnung));
-            db = Double.parseDouble(String.valueOf(db).replaceAll("-",""));
-            return db;
-        }
-        return calcKlammern(inputueberpruefen(rechnung));
+        return Double.parseDouble(calcpre(rechnung));
     }
-
+    //Methode zum Aufrufen falls eine Variablen Liste mitgegeben wird
     public double rechnerstarten(String rechnung, ArrayList<String> liste) throws Exception {
         for(int i = 0; i < liste.toArray().length; i++){
             String str = liste.get(i);
@@ -51,13 +44,30 @@ public class Rechner {
                 rechnung = rechnung.replaceAll(Variablen, Wert);
             }
         }
-        if(rechnung.contains("|")){
-            rechnung = rechnung.replaceAll("\\|","");
-            double db = calcKlammern(inputueberpruefen(rechnung));
-            db = Double.parseDouble(String.valueOf(db).replaceAll("-",""));
-            return db;
+        return Double.parseDouble(calcpre(rechnung));
+    }
+    //Der eigentliche rechneraufrufer
+    private String calcpre(String str) throws Exception{
+        if(str == null){
+            throw new Exception("null");
         }
-        return calcKlammern(inputueberpruefen(rechnung));
+        if(str.contains("|")){
+            str = str.replaceAll("\\|","");
+            String str2 = String.valueOf(calcKlammern(inputueberpruefen(str)));
+            str2 = str2.replaceAll("-","");
+            return calcpre(str2);
+        }
+        if(str.contains("√")) {
+            String wurzel;
+            String vorwurzel ="";
+            if(str.indexOf("√")>0)
+                vorwurzel = str.substring(0,str.indexOf("√"));
+            wurzel = str.substring(str.indexOf("√"));
+            wurzel = wurzel.replaceAll("√","");
+            wurzel = calcpre(wurzel);
+            return calcpre(vorwurzel + Math.sqrt(Double.parseDouble(wurzel)));
+        }
+        return String.valueOf(calcKlammern(inputueberpruefen(str)));
     }
 
     private double calcKlammern(String str) throws Exception {
@@ -238,7 +248,11 @@ public class Rechner {
     }
 
     //Entfernt Typische Tippfehler des Benutzers
-    private String inputueberpruefen(String inp) {
+    private String inputueberpruefen(String inp) throws Exception{
+        //null
+        if(inp==null){
+           throw new Exception("No input");
+        }
         //Leerzeichen
         inp = inp.replaceAll("\\s", "");
         //Bring sinh, cosh und tanh auf 3 Zeichen damit es wie sin cos und tan behandelt werden kann
