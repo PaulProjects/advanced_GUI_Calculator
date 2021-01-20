@@ -33,6 +33,7 @@ public class Rechner {
     public double rechnerstarten(String rechnung) throws Exception {
         return Double.parseDouble(calcpre(rechnung));
     }
+
     //Methode zum Aufrufen falls eine Variablen Liste mitgegeben wird
     public double rechnerstarten(String rechnung, ArrayList<String> liste) throws Exception {
         for(int i = 0; i < liste.toArray().length; i++){
@@ -46,6 +47,7 @@ public class Rechner {
         }
         return Double.parseDouble(calcpre(rechnung));
     }
+
     //Der eigentliche rechneraufrufer
     private String calcpre(String str) throws Exception{
         if(str == null){

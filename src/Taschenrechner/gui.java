@@ -9,7 +9,10 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -69,9 +72,10 @@ public class gui implements ActionListener {
         JLabel label = new JLabel("Letzte Rechnungen:");
 
         //Textfeld welches den Userinput zeigt [Quelle:https://www.geeksforgeeks.org/java-swing-jtextfield/]
-        final JTextField textFeld = new JTextField(1){
+        final JTextField textFeld = new JTextField(1) {
             //Remove Border [Quelle:https://stackoverflow.com/a/2281980]
-            @Override public void setBorder(Border border) {
+            @Override
+            public void setBorder(Border border) {
                 // No!
             }
         };
@@ -791,7 +795,7 @@ public class gui implements ActionListener {
             int j = textFeld.getCaretPosition();
             textFeld.requestFocusInWindow();
             //Verhindert das der Cursor in das negative gesetzt wird und ein Error entsteht
-            if(j!=0) {
+            if (j != 0) {
                 textFeld.setCaretPosition(j - 1);
             }
         });
@@ -882,7 +886,7 @@ public class gui implements ActionListener {
             int j = textFeld.getCaretPosition();
             textFeld.requestFocusInWindow();
             //Verhindert den Cursor außerhalb des Textes zu setzen
-            if(j < textFeld.getText().length()) {
+            if (j < textFeld.getText().length()) {
                 textFeld.setCaretPosition(j + 1);
             }
         });
@@ -900,7 +904,7 @@ public class gui implements ActionListener {
         //Textfarbe
         variablen.setForeground(Color.WHITE);
         //Text in die mitte [Quelle:https://stackoverflow.com/a/21029761]
-        DefaultListCellRenderer renderer =  (DefaultListCellRenderer)variablen.getCellRenderer();
+        DefaultListCellRenderer renderer = (DefaultListCellRenderer) variablen.getCellRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
 
         //Die Liste scrollbar machen (Wird nicht benutzt im Moment!)
@@ -925,9 +929,10 @@ public class gui implements ActionListener {
         variablenerstellen.setLayout(new WrapLayout());
 
         //Textfelder für die Variablen erstellen
-        JTextField n36 = new JTextField(){
+        JTextField n36 = new JTextField() {
             //Border entfernen[Quelle:https://stackoverflow.com/a/2281980]
-            @Override public void setBorder(Border border) {
+            @Override
+            public void setBorder(Border border) {
                 // No!
             }
         };
@@ -947,7 +952,7 @@ public class gui implements ActionListener {
         variablenerstellen.add(n37);
         n37.addActionListener(actionEvent -> {
             String str = n36.getText();
-            if(!str.equals("")) {
+            if (!str.equals("")) {
                 n37.setIcon(new ImageIcon("ressource/icons/+round.png"));
                 if (!str.contains("=")) {
                     str = str + "=0";
@@ -956,8 +961,7 @@ public class gui implements ActionListener {
                 n36.setText("");
                 Variablen.add(str);
                 textFeld.setText(textFeld.getText());
-            }
-            else {
+            } else {
                 n37.setIcon(new ImageIcon("ressource/icons/+roundred.png"));
             }
         });
@@ -991,7 +995,7 @@ public class gui implements ActionListener {
         variablenaction.add(nvariableninsert);
         nvariableninsert.addActionListener(actionEvent -> {
             String str = variablen.getSelectedValue();
-            if(str==null) str = "";
+            if (str == null) str = "";
             //Nur das Ergebnis wird benötigt [Quelle:https://stackoverflow.com/questions/16741274/java-extract-characters-after-a-specific-character]
             str = str.substring(str.lastIndexOf("=") + 1);
             String global = textFeld.getText();
@@ -1068,20 +1072,19 @@ public class gui implements ActionListener {
                             n25.setEnabled(false);
                             n30.setEnabled(false);
                         }
-                    }
-                    else{
+                    } else {
                         n25.setEnabled(false);
                         n30.setEnabled(false);
                     }
 
-                    } catch(Exception d){
-                        //Deaktiviert den "=" Knopf da die Rechnung nicht möglich ist
-                        n23.setEnabled(false);
-                        String str = d.getMessage();
-                        if (d.getMessage().contains("String index out of range:"))
-                            str = "Fehlende Zahl";
-                        loesung.setText(str);
-                        loesung.setBackground(Color.red);
+                } catch (Exception d) {
+                    //Deaktiviert den "=" Knopf da die Rechnung nicht möglich ist
+                    n23.setEnabled(false);
+                    String str = d.getMessage();
+                    if (d.getMessage().contains("String index out of range:"))
+                        str = "Fehlende Zahl";
+                    loesung.setText(str);
+                    loesung.setBackground(Color.red);
                     if (textFeld.getText().contains(".")) {
                         try {
                             //Abwandlung von [Quelle:https://stackoverflow.com/a/5439547]
@@ -1093,8 +1096,8 @@ public class gui implements ActionListener {
                             n30.setEnabled(false);
                         }
                     }
-                    }
                 }
+            }
         });
 
         /*
@@ -1115,10 +1118,10 @@ public class gui implements ActionListener {
 
         JButton nrechnungeninsert = new JButton(ninsertic);
         nrechnungeninsert.setToolTipText("In Textfeld einfügen");
-        rechnungenaction.add(nrechnungeninsert,BorderLayout.WEST);
+        rechnungenaction.add(nrechnungeninsert, BorderLayout.WEST);
         nrechnungeninsert.addActionListener(actionEvent -> {
             String str = rechnungen0.getSelectedValue();
-            if(str==null) str = "";
+            if (str == null) str = "";
             //Nur das Ergebnis wird benötigt [Quelle:https://stackoverflow.com/questions/16741274/java-extract-characters-after-a-specific-character]
             str = str.substring(str.lastIndexOf("=") + 1);
             String global = textFeld.getText();
@@ -1134,7 +1137,7 @@ public class gui implements ActionListener {
 
         JButton nrechnungenremove = new JButton(nremoveic);
         nrechnungenremove.setToolTipText("Rechnung entfernen");
-        rechnungenaction.add(nrechnungenremove,BorderLayout.EAST);
+        rechnungenaction.add(nrechnungenremove, BorderLayout.EAST);
         nrechnungenremove.addActionListener(actionEvent -> {
             int index = rechnungen0.getSelectedIndex();
             if (index >= 0) {
@@ -1255,21 +1258,6 @@ public class gui implements ActionListener {
                         if (a == JOptionPane.YES_OPTION) {
                             DefaultListModel<String> listModel = (DefaultListModel<String>) rechnungen0.getModel();
                             listModel.removeAllElements();
-                        }
-                    }
-                    case KeyEvent.VK_INSERT -> {
-                        System.out.println("1213");
-                        try {
-                            String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-                            String global = textFeld.getText();
-                            int j = textFeld.getCaretPosition();
-                            global = global.substring(0, j) + data + global.substring(j);
-                            textFeld.setText(global);
-                            textFeld.requestFocusInWindow();
-                            textFeld.setCaretPosition(j + 1);
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(jmain, "[Error]Clipboard");
-                            e.printStackTrace();
                         }
                     }
                 }
