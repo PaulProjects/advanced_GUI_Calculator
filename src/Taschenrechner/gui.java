@@ -146,9 +146,9 @@ public class gui implements ActionListener {
             listModel.removeAllElements();
         });
 
-				/*
-				Modus wechsler [Quelle:https://stackoverflow.com/a/30702197]
-				 */
+        /*
+		Modus wechsler [Quelle:https://stackoverflow.com/a/30702197]
+		*/
         JMenu modemenu = new JMenu("Modus");
         JCheckBoxMenuItem basicmenuitem = new JCheckBoxMenuItem("Basic");
         basicmenuitem.setState(true);
@@ -183,53 +183,99 @@ public class gui implements ActionListener {
             splitpane4.setDividerLocation(jmain.getSize().width - 300);
         });
 
-        //Menü um zwischen Dark und Light mode umzuschalten
-        /*JMenu lookmenu = new JMenu("Aussehen");
-        JCheckBoxMenuItem whitemi = new JCheckBoxMenuItem("Hell");
-        whitemi.setState(true);
-        JCheckBoxMenuItem darkmi = new JCheckBoxMenuItem("Dunkel");
+        /*
+        Mathematische Konstanten
+         */
+        JMenu menukonstanten = new JMenu("Konstanten");
 
-        lookmenu.add(whitemi);
-        lookmenu.add(darkmi);
-        menuBar.add(lookmenu);
+        JMenuItem iEulerscheZahl = new JMenuItem("e");
+        iEulerscheZahl.setToolTipText("Eulersche Zahl");
 
-        whitemi.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (!darkmi.getState()) {
-                    whitemi.setState(true);
-                }
-                darkmi.setState(false);
-                //textfeld [Quelle:https://stackoverflow.com/a/34218295]
-                textFeld.setForeground(Color.BLACK);
-                textFeld.setBackground(Color.WHITE);
-                //Liste
-                rechnungen.setBackground(Color.WHITE);
-                rechnungen.setForeground(Color.BLACK);
-                //Label über Liste
-                label.setBackground(Color.WHITE);
-                label.setForeground(Color.BLACK);
-            }
+        JMenuItem iGoldenerSchnitt = new JMenuItem("φ");
+        iGoldenerSchnitt.setToolTipText("Goldener Schnitt");
+
+        JMenuItem ipi = new JMenuItem("π");
+        ipi.setToolTipText("pi");
+
+        JMenuItem iMillsKonstante = new JMenuItem("θ");
+        iMillsKonstante.setToolTipText("Mills-Konstante");
+
+        JMenuItem iEulerMaschKonstante = new JMenuItem("γ");
+        iEulerMaschKonstante.setToolTipText("Euler-Masch-Konstante");
+
+        JMenuItem iGolombDickmanKonstante = new JMenuItem("λ");
+        iGolombDickmanKonstante.setToolTipText("Golomb-Dickman-Konstante");
+
+        menukonstanten.add(iEulerscheZahl);
+        menukonstanten.add(iGoldenerSchnitt);
+        menukonstanten.add(ipi);
+        menukonstanten.add(iMillsKonstante);
+        menukonstanten.add(iEulerMaschKonstante);
+        menukonstanten.add(iGolombDickmanKonstante);
+
+        menuBar.add(menukonstanten);
+
+        //Action Listener für die Konstanten
+        iEulerscheZahl.addActionListener(actionEvent -> {
+            String num1 = "e";
+            String global = textFeld.getText();
+            int j = textFeld.getCaretPosition();
+            global = global.substring(0, j) + num1 + global.substring(j);
+            textFeld.setText(global);
+            textFeld.requestFocusInWindow();
+            textFeld.setCaretPosition(j + 1);
         });
 
-        darkmi.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (!whitemi.getState()) {
-                    darkmi.setState(true);
-                }
-                whitemi.setState(false);
+        iGoldenerSchnitt.addActionListener(actionEvent -> {
+            String num1 = "φ";
+            String global = textFeld.getText();
+            int j = textFeld.getCaretPosition();
+            global = global.substring(0, j) + num1 + global.substring(j);
+            textFeld.setText(global);
+            textFeld.requestFocusInWindow();
+            textFeld.setCaretPosition(j + 1);
+        });
 
-                textFeld.setForeground(Color.WHITE);
-                textFeld.setBackground(Color.BLACK);
+        ipi.addActionListener(actionEvent -> {
+            String num1 = "π";
+            String global = textFeld.getText();
+            int j = textFeld.getCaretPosition();
+            global = global.substring(0, j) + num1 + global.substring(j);
+            textFeld.setText(global);
+            textFeld.requestFocusInWindow();
+            textFeld.setCaretPosition(j + 1);
+        });
 
-                rechnungen.setBackground(Color.BLACK);
-                rechnungen.setForeground(Color.WHITE);
+        iMillsKonstante.addActionListener(actionEvent -> {
+            String num1 = "θ";
+            String global = textFeld.getText();
+            int j = textFeld.getCaretPosition();
+            global = global.substring(0, j) + num1 + global.substring(j);
+            textFeld.setText(global);
+            textFeld.requestFocusInWindow();
+            textFeld.setCaretPosition(j + 1);
+        });
 
-                label.setBackground(Color.BLACK);
-                label.setForeground(Color.WHITE);
-            }
-        });*/
+        iEulerMaschKonstante.addActionListener(actionEvent -> {
+            String num1 = "γ";
+            String global = textFeld.getText();
+            int j = textFeld.getCaretPosition();
+            global = global.substring(0, j) + num1 + global.substring(j);
+            textFeld.setText(global);
+            textFeld.requestFocusInWindow();
+            textFeld.setCaretPosition(j + 1);
+        });
+
+        iGolombDickmanKonstante.addActionListener(actionEvent -> {
+            String num1 = "λ";
+            String global = textFeld.getText();
+            int j = textFeld.getCaretPosition();
+            global = global.substring(0, j) + num1 + global.substring(j);
+            textFeld.setText(global);
+            textFeld.requestFocusInWindow();
+            textFeld.setCaretPosition(j + 1);
+        });
+
 
         //Gridbag [Quelle:https://riptutorial.com/de/swing/example/10132/wie-funktioniert-gridbaglayout-]
         p1.setLayout(new GridBagLayout());
@@ -972,26 +1018,6 @@ public class gui implements ActionListener {
         gbc.gridx = 2;
         gbc.gridy = 0;
         p2.add(variablenaction, gbc);
-
-        /*
-            Konstanten
-         */
-        model1.addElement("e");
-        //Eulersche Zahl
-
-        model1.addElement("φ");
-        //Goldener Schnitt
-
-        model1.addElement("π");
-        //pi
-        model1.addElement("θ");
-        //Mills-Konstante
-
-        model1.addElement("γ");
-        //Euler-Masch-Konstante
-
-        model1.addElement("λ");
-        //Golomb-Dickman-Konstante
 
         //Live Updater des lösungsfeld [Quelle:https://stackoverflow.com/questions/3953208/value-change-listener-to-jtextfield]
         textFeld.getDocument().addDocumentListener(new DocumentListener() {
