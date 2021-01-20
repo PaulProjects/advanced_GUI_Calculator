@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Facharbeit Paul Taschenrechner:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Facharbeit_Paul_Taschenrechner_jar</output-path>
+    <root id="archive" name="Facharbeit Paul Taschenrechner.jar">
+      <element id="module-output" name="Facharbeit Paul Taschenrechner" />
+    </root>
+  </artifact>
+</component>
