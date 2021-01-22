@@ -957,6 +957,9 @@ public class gui implements ActionListener {
                 if (!str.contains("=")) {
                     str = str + "=0";
                 }
+                if(str.indexOf("=") == str.length()-1){
+                    str = str + "0";
+                }
                 model1.addElement(str);
                 n36.setText("");
                 Variablen.add(str);
@@ -1268,7 +1271,7 @@ public class gui implements ActionListener {
             }
         });
 
-        //Splitpane 5 für die Insert und Remove knöpfe der rechnungs Liste
+        //Splitpane 5 für die Insert und Remove knöpfe der rechnungsliste
             /*
                 Rechner Action Knöpfe
                 ---------------------
