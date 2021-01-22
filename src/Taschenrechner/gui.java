@@ -595,13 +595,13 @@ public class gui implements ActionListener {
         gbc.gridy = 3;
         p1.add(n18, gbc);
         n18.addActionListener(e -> {
-            String num1 = "√";
+            String num1 = "√[]";
             String global = textFeld.getText();
             int j = textFeld.getCaretPosition();
             global = global.substring(0, j) + num1 + global.substring(j);
             textFeld.setText(global);
             textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(j + 1);
+            textFeld.setCaretPosition(j + 2);
         });
 
         // ^

@@ -57,7 +57,7 @@ public class Rechner {
         //Prüft ob mit Betrag gerechnet wird
         if (str.contains("|")) {
             String betrag;
-            String vorbetrag = "";
+            String vorbetrag  = "";
             String nachbetrag = "";
             //Prüft ob die Schreibweise eingehalten wurde
             if (str.indexOf("|") == str.lastIndexOf("|")) {
@@ -89,13 +89,36 @@ public class Rechner {
         //Prüft ob es zur Wurzelrechnung kommt
         if (str.contains("√")) {
             String wurzel;
-            String vorwurzel = "";
-            if (str.indexOf("√") > 0)
+            String vorwurzel  = "";
+            String nachwurzel = "";
+            //Speichert das was vor der Wurzel steht
+            if (str.indexOf("√") != 0) {
                 vorwurzel = str.substring(0, str.indexOf("√"));
-            wurzel = str.substring(str.indexOf("√"));
+            }
+            //Entfernt das vor der Wurzel
+            str = str.substring(str.indexOf("√"));
+            //Speichert den Wurzelterm
+            try {
+                wurzel = str.substring(0, str.indexOf("]"));
+            }
+            catch(Exception ignored){
+                throw new Exception("missing ]");
+            }
+            //Das Nach der Wurzel speichern
+            if (str.indexOf("]") != str.length() - 1) {
+                nachwurzel = str.substring(str.indexOf("]")+1);
+            }
+            //Schaut ob eine geöffnete Klammer da ist wo sie sein sollte
+            if (wurzel.charAt(0)=='[') { //Char primitiv--> Man kann == benutzen
+                throw new Exception("Missing [");
+            }
+            //Entfernt die Wurzel
             wurzel = wurzel.replaceAll("√", "");
+            //Entfernt die Klammer
+            wurzel = wurzel.replaceAll("\\[","");
+            wurzel = wurzel.replaceAll("]","");
             wurzel = calcpre(wurzel);
-            return calcpre(vorwurzel + Math.sqrt(Double.parseDouble(wurzel)));
+            return calcpre(vorwurzel + Math.sqrt(Double.parseDouble(wurzel))+nachwurzel);
         }
         return String.valueOf(calcKlammern(inputueberpruefen(str)));
     }
