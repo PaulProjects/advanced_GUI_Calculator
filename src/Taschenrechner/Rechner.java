@@ -36,9 +36,9 @@ public class Rechner {
 
     //Methode zum Aufrufen falls eine Variablen Liste mitgegeben wird
     public double rechnerstarten(String rechnung, ArrayList<String> liste) throws Exception {
-        for(int i = 0; i < liste.toArray().length; i++){
+        for (int i = 0; i < liste.toArray().length; i++) {
             String str = liste.get(i);
-            if(str.contains("=")) {
+            if (str.contains("=")) {
                 int klammer = str.indexOf("=");
                 String Variablen = str.substring(0, klammer);
                 String Wert = str.substring(klammer + 1);
@@ -49,23 +49,51 @@ public class Rechner {
     }
 
     //Der eigentliche rechneraufrufer
-    private String calcpre(String str) throws Exception{
-        if(str == null){
+    private String calcpre(String str) throws Exception {
+        //Prüft ob der String nicht leer ist
+        if (str == null) {
             throw new Exception("null");
         }
-        if(str.contains("|")){
-            str = str.replaceAll("\\|","");
-            String str2 = String.valueOf(calcKlammern(inputueberpruefen(str)));
-            str2 = str2.replaceAll("-","");
-            return calcpre(str2);
+        //Prüft ob mit Betrag gerechnet wird
+        if (str.contains("|")) {
+            String betrag;
+            String vorbetrag = "";
+            String nachbetrag = "";
+            //Prüft ob die Schreibweise eingehalten wurde
+            if (str.indexOf("|") == str.lastIndexOf("|")) {
+                throw new Exception("Missing |");
+            }
+            //Speichert das was vor dem Betrag steht
+            if (str.indexOf("|") != 0) {
+                vorbetrag = str.substring(0, str.indexOf("|"));
+            }
+            //Speichert was hinter dem Betrag steht
+            if (str.lastIndexOf("|") != str.length() - 1) {
+                nachbetrag = str.substring(str.lastIndexOf("|")+1);
+            }
+            //Speichert den Betrag
+            betrag = str.substring(str.indexOf("|"), str.lastIndexOf("|"));
+            //Entfernt die Betragsstriche
+            betrag = betrag.replaceAll("\\|", "");
+            //Rechnet den Betrag aus wenn er eine Rechnung enthält
+            try {
+                betrag = String.valueOf(calcKlammern(inputueberpruefen(betrag)));
+            }
+            catch(Exception ignored){
+            }
+            //Setzt das Ergebnis in den Betrag
+            betrag = betrag.replaceAll("-", "");
+            //Gibt die zusammengesetzte Rechnung zurück
+            return calcpre(vorbetrag+betrag+nachbetrag);
         }
-        if(str.contains("√")) {
+        //Prüft ob es zur Wurzelrechnung kommt
+        if (str.contains("√")) {
             String wurzel;
-            String vorwurzel ="";
-            if(str.indexOf("√")>0)
-                vorwurzel = str.substring(0,str.indexOf("√"));
+            String vorwurzel = "";
+            if (str.indexOf("√") > 0)
+                vorwurzel = str.substring(0, str.indexOf("√"));
             wurzel = str.substring(str.indexOf("√"));
-            wurzel = wurzel.replaceAll("√","");
+            wurzel = wurzel.replaceAll("√", "");
             wurzel = calcpre(wurzel);
             return calcpre(vorwurzel + Math.sqrt(Double.parseDouble(wurzel)));
         }
@@ -97,11 +125,9 @@ public class Rechner {
                 //Fügt ein Malzeichen an falls z.b. "10(8+2)" geschrieben wurde"
                 if (operator == -1) parts[0] = parts[0] + "*";
                 else {
-                    switch (operator) {
-                        case OPERATOR_POW -> {
-                            parts[0] = parts[0].substring(0, parts[0].length() - 1);
-                            parts[1] = String.valueOf(calc2(Double.parseDouble(parts[1]), operator));
-                        }
+                    if (operator == OPERATOR_POW) {
+                        parts[0] = parts[0].substring(0, parts[0].length() - 1);
+                        parts[1] = String.valueOf(calc2(Double.parseDouble(parts[1]), operator));
                     }
                 }
             }
@@ -232,9 +258,9 @@ public class Rechner {
                 case "sin" -> OPERATOR_SIN;
                 case "cos" -> OPERATOR_COS;
                 case "tan" -> OPERATOR_TAN;
-                case "sih"-> OPERATOR_SINH;
-                case "coh"-> OPERATOR_COSH;
-                case "tah"-> OPERATOR_TANH;
+                case "sih" -> OPERATOR_SINH;
+                case "coh" -> OPERATOR_COSH;
+                case "tah" -> OPERATOR_TANH;
                 default -> -1;
             };
         }
@@ -250,24 +276,24 @@ public class Rechner {
     }
 
     //Entfernt Typische Tippfehler des Benutzers
-    private String inputueberpruefen(String inp) throws Exception{
+    private String inputueberpruefen(String inp) throws Exception {
         //null
-        if(inp==null){
-           throw new Exception("No input");
+        if (inp == null) {
+            throw new Exception("No input");
         }
         //Leerzeichen
         inp = inp.replaceAll("\\s", "");
         //Bring sinh, cosh und tanh auf 3 Zeichen damit es wie sin cos und tan behandelt werden kann
-        inp = inp.replaceAll("sinh","sih");
-        inp = inp.replaceAll("cosh","coh");
-        inp = inp.replaceAll("tanh","tah");
+        inp = inp.replaceAll("sinh", "sih");
+        inp = inp.replaceAll("cosh", "coh");
+        inp = inp.replaceAll("tanh", "tah");
         //Konstanten
-        inp = inp.replaceAll("e","2.7182818284");
-        inp = inp.replaceAll("φ","1.6180339887");
-        inp = inp.replaceAll("π","3.1415926535");
-        inp = inp.replaceAll("θ","1.3063778838");
-        inp = inp.replaceAll("γ","0.5772156649");
-        inp = inp.replaceAll("λ","0.6243299885");
+        inp = inp.replaceAll("e", "2.7182818284");
+        inp = inp.replaceAll("φ", "1.6180339887");
+        inp = inp.replaceAll("π", "3.1415926535");
+        inp = inp.replaceAll("θ", "1.3063778838");
+        inp = inp.replaceAll("γ", "0.5772156649");
+        inp = inp.replaceAll("λ", "0.6243299885");
         return inp;
     }
 }
