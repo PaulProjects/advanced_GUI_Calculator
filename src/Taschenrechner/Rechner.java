@@ -5,25 +5,24 @@ import java.util.ArrayList;
 public class Rechner {
 
     //Die Verschiedenen möglichen Operatoren
-    public final static int OPERATOR_PLUS = 0;
-    public final static int OPERATOR_MINUS = 1;
-    public final static int OPERATOR_MULTIPLY = 2;
-    public final static int OPERATOR_DIVIDE = 3;
-    public final static int OPERATOR_POW = 4;
-    // public final static int OPERATOR_SQRT = 5;
+    private final static int OPERATOR_PLUS = 0;
+    private final static int OPERATOR_MINUS = 1;
+    private final static int OPERATOR_MULTIPLY = 2;
+    private final static int OPERATOR_DIVIDE = 3;
+    private final static int OPERATOR_POW = 4;
 
     //Außerdem noch Sin,Cos und Tan Funktionen
-    public final static int OPERATOR_SIN = 10;
-    public final static int OPERATOR_COS = 11;
-    public final static int OPERATOR_TAN = 12;
+    private final static int OPERATOR_SIN = 10;
+    private final static int OPERATOR_COS = 11;
+    private final static int OPERATOR_TAN = 12;
     //Hyperbel Funktionen
-    public final static int OPERATOR_SINH = 13;
-    public final static int OPERATOR_COSH = 14;
-    public final static int OPERATOR_TANH = 15;
+    private final static int OPERATOR_SINH = 13;
+    private final static int OPERATOR_COSH = 14;
+    private final static int OPERATOR_TANH = 15;
     //Mögliche Werte von Ganzen Zahlen
-    public static final String DIGITS = "0123456789";
+    private static final String DIGITS = "0123456789";
     //Und für Zahlen mit nachkommastellen
-    public static final String DIGITS_CONTENTS = DIGITS + ".,";
+    private static final String DIGITS_CONTENTS = DIGITS + ".,";
 
     //Konstruktor leer da die Klasse bereits in der Main Klasse als neues Objekt angelegt wurde
     Rechner() {

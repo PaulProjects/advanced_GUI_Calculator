@@ -674,30 +674,32 @@ public class gui implements ActionListener {
         gbc.gridwidth = 2;
         p1.add(n23, gbc);
         n23.addActionListener(e -> {
-            try {
-                String s;
-                if (!Variablen.isEmpty()) {
-                    s = String.valueOf(prechner.rechnerstarten(textFeld.getText(), Variablen));
-                } else {
-                    s = String.valueOf(prechner.rechnerstarten(textFeld.getText()));
+            if (!textFeld.getText().isEmpty()) {
+                try {
+                    String s;
+                    if (!Variablen.isEmpty()) {
+                        s = String.valueOf(prechner.rechnerstarten(textFeld.getText(), Variablen));
+                    } else {
+                        s = String.valueOf(prechner.rechnerstarten(textFeld.getText()));
+                    }
+                    //Wenn es keine Nachkommastellen gibt werden das Komma und die 0 entfernt
+                    //[Quelle:https://www.javatpoint.com/java-string-endswith]
+                    if (s.endsWith(".0")) {
+                        //Löscht die letzten 2 Zeichen[Quelle:https://stackoverflow.com/questions/30708036/delete-the-last-two-characters-of-the-string]
+                        s = s.substring(0, s.length() - 2);
+                    }
+                    //Ergebnis der Liste hinzufügen
+                    model0.addElement(textFeld.getText() + "=" + s);
+                    //Ergebnis in textFeld setzen
+                    textFeld.setText(s);
+                } catch (Exception d) {
+                    //theoretisch unerreichbar
+                    textFeld.setText(d.getMessage());
+                    textFeld.setBackground(Color.red);
                 }
-                //Wenn es keine Nachkommastellen gibt werden das Komma und die 0 entfernt
-                //[Quelle:https://www.javatpoint.com/java-string-endswith]
-                if (s.endsWith(".0")) {
-                    //Löscht die letzten 2 Zeichen[Quelle:https://stackoverflow.com/questions/30708036/delete-the-last-two-characters-of-the-string]
-                    s = s.substring(0, s.length() - 2);
-                }
-                //Ergebnis der Liste hinzufügen
-                model0.addElement(textFeld.getText() + "=" + s);
-                //Ergebnis in textFeld setzen
-                textFeld.setText(s);
-            } catch (Exception d) {
-                //theoretisch unerreichbar
-                textFeld.setText(d.getMessage());
-                textFeld.setBackground(Color.red);
+                textFeld.requestFocusInWindow();
+                textFeld.setCaretPosition(textFeld.getDocument().getLength());
             }
-            textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(textFeld.getDocument().getLength());
         });
         //n24 wird überlagert von 23
 
@@ -725,16 +727,18 @@ public class gui implements ActionListener {
         gbc.gridy = 0;
         p2.add(n25, gbc);
         n25.addActionListener(e -> {
-            //Erstmal die Rechnung lösen
-            try {
-                double global = Double.parseDouble(textFeld.getText());
-                textFeld.setText(String.valueOf(Math.round(global)));
-            } catch (Exception ex) {
-                textFeld.setText("[ERROR] Nur einzelne Zahlen runden");
-                textFeld.setBackground(Color.red);
+            if (!textFeld.getText().isEmpty()) {
+                //Erstmal die Rechnung lösen
+                try {
+                    double global = Double.parseDouble(textFeld.getText());
+                    textFeld.setText(String.valueOf(Math.round(global)));
+                } catch (Exception ex) {
+                    textFeld.setText("[ERROR] Nur einzelne Zahlen runden");
+                    textFeld.setBackground(Color.red);
+                }
+                textFeld.requestFocusInWindow();
+                textFeld.setCaretPosition(textFeld.getDocument().getLength());
             }
-            textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(textFeld.getDocument().getLength());
         });
 
         //sin
@@ -810,17 +814,19 @@ public class gui implements ActionListener {
         gbc.gridy = 0;
         p2.add(n30, gbc);
         n30.addActionListener(e -> {
-            n23.doClick();
-            try {
-                double global = Double.parseDouble(textFeld.getText());
-                double value = Math.round(100.0 * global) / 100.0;
-                textFeld.setText(String.valueOf(value));
-            } catch (Exception ex) {
-                textFeld.setText("[ERROR] Nur einzelne Zahlen runden");
-                textFeld.setBackground(Color.red);
+            if (!textFeld.getText().isEmpty()) {
+                n23.doClick();
+                try {
+                    double global = Double.parseDouble(textFeld.getText());
+                    double value = Math.round(100.0 * global) / 100.0;
+                    textFeld.setText(String.valueOf(value));
+                } catch (Exception ex) {
+                    textFeld.setText("[ERROR] Nur einzelne Zahlen runden");
+                    textFeld.setBackground(Color.red);
+                }
+                textFeld.requestFocusInWindow();
+                textFeld.setCaretPosition(textFeld.getDocument().getLength());
             }
-            textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(textFeld.getDocument().getLength());
         });
 
         //sinh
@@ -957,7 +963,7 @@ public class gui implements ActionListener {
                 if (!str.contains("=")) {
                     str = str + "=0";
                 }
-                if(str.indexOf("=") == str.length()-1){
+                if (str.indexOf("=") == str.length() - 1) {
                     str = str + "0";
                 }
                 model1.addElement(str);
@@ -1044,59 +1050,66 @@ public class gui implements ActionListener {
             }
 
             public void rechnen() {
-                try {
-                    //Aktiviert den "=" Knopf da das Lösen möglich ist [Quelle:https://stackoverflow.com/questions/1625855/how-to-disable-javax-swing-jbutton-in-java]
+                //rein visuell. Aktiviert die Buttons falls das Textfeld leer ist
+                if (textFeld.getText().isEmpty()) {
+                    System.out.println("JA");
                     n23.setEnabled(true);
-                    loesung.setBackground(Color.WHITE);
-                    //Taschenrechner.Rechner aufrufen
-                    String s;
-                    if (!Variablen.isEmpty()) {
-                        s = String.valueOf(prechner.rechnerstarten(textFeld.getText(), Variablen));
-                    } else {
-                        s = String.valueOf(prechner.rechnerstarten(textFeld.getText()));
-                    }
-                    //Wenn es keine Nachkommastellen gibt werden das Komma und die 0 entfernt
-                    //[Quelle:https://www.javatpoint.com/java-string-endswith]
-                    if (s.endsWith(".0")) {
-                        //Löscht die letzten 2 Zeichen[Quelle:https://stackoverflow.com/questions/30708036/delete-the-last-two-characters-of-the-string]
-                        s = s.substring(0, s.length() - 2);
-                    }
-                    //Ergebnis in textFeld setzen
-                    loesung.setText("Lösung:" + s);
-                    //Deaktiviert die Runden Funktion wenn mehr als nur ein int in der Rechenbox steht
-                    //Schaut ob überhaupt ein Komma vorkommt [Quelle:https://www.javatpoint.com/java-string-contains]
-                    if (s.contains(".")) {
-                        try {
-                            //Abwandlung von [Quelle:https://stackoverflow.com/a/5439547]
-                            Double.parseDouble(s);
-                            n25.setEnabled(true);
-                            n30.setEnabled(true);
-                        } catch (Exception e) {
+                    n25.setEnabled(true);
+                    n30.setEnabled(true);
+                } else {
+                    try {
+                        //Aktiviert den "=" Knopf da das Lösen möglich ist [Quelle:https://stackoverflow.com/questions/1625855/how-to-disable-javax-swing-jbutton-in-java]
+                        n23.setEnabled(true);
+                        loesung.setBackground(Color.WHITE);
+                        //Taschenrechner.Rechner aufrufen
+                        String s;
+                        if (!Variablen.isEmpty()) {
+                            s = String.valueOf(prechner.rechnerstarten(textFeld.getText(), Variablen));
+                        } else {
+                            s = String.valueOf(prechner.rechnerstarten(textFeld.getText()));
+                        }
+                        //Wenn es keine Nachkommastellen gibt werden das Komma und die 0 entfernt
+                        //[Quelle:https://www.javatpoint.com/java-string-endswith]
+                        if (s.endsWith(".0")) {
+                            //Löscht die letzten 2 Zeichen[Quelle:https://stackoverflow.com/questions/30708036/delete-the-last-two-characters-of-the-string]
+                            s = s.substring(0, s.length() - 2);
+                        }
+                        //Ergebnis in textFeld setzen
+                        loesung.setText("Lösung:" + s);
+                        //Deaktiviert die Runden Funktion wenn mehr als nur ein int in der Rechenbox steht
+                        //Schaut ob überhaupt ein Komma vorkommt [Quelle:https://www.javatpoint.com/java-string-contains]
+                        if (s.contains(".")) {
+                            try {
+                                //Abwandlung von [Quelle:https://stackoverflow.com/a/5439547]
+                                Double.parseDouble(s);
+                                n25.setEnabled(true);
+                                n30.setEnabled(true);
+                            } catch (Exception e) {
+                                n25.setEnabled(false);
+                                n30.setEnabled(false);
+                            }
+                        } else {
                             n25.setEnabled(false);
                             n30.setEnabled(false);
                         }
-                    } else {
-                        n25.setEnabled(false);
-                        n30.setEnabled(false);
-                    }
-
-                } catch (Exception d) {
-                    //Deaktiviert den "=" Knopf da die Rechnung nicht möglich ist
-                    n23.setEnabled(false);
-                    String str = d.getMessage();
-                    if (d.getMessage().contains("String index out of range:"))
-                        str = "Fehlende Zahl";
-                    loesung.setText(str);
-                    loesung.setBackground(Color.red);
-                    if (textFeld.getText().contains(".")) {
-                        try {
-                            //Abwandlung von [Quelle:https://stackoverflow.com/a/5439547]
-                            Double.parseDouble(textFeld.getText());
-                            n25.setEnabled(true);
-                            n30.setEnabled(true);
-                        } catch (Exception e) {
-                            n25.setEnabled(false);
-                            n30.setEnabled(false);
+                    } catch (Exception d) {
+                        //Deaktiviert den "=" Knopf da die Rechnung nicht möglich ist
+                        n23.setEnabled(false);
+                        String str = d.getMessage();
+                        if (d.getMessage().contains("String index out of range:"))
+                            str = "Fehlende Zahl";
+                        loesung.setText(str);
+                        loesung.setBackground(Color.red);
+                        if (textFeld.getText().contains(".")) {
+                            try {
+                                //Abwandlung von [Quelle:https://stackoverflow.com/a/5439547]
+                                Double.parseDouble(textFeld.getText());
+                                n25.setEnabled(true);
+                                n30.setEnabled(true);
+                            } catch (Exception e) {
+                                n25.setEnabled(false);
+                                n30.setEnabled(false);
+                            }
                         }
                     }
                 }
