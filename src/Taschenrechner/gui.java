@@ -426,7 +426,7 @@ public class gui implements ActionListener {
         });
 
         //*
-        Icon n8ic = new ImageIcon("ressource/icons/*.png");
+        Icon n8ic = new ImageIcon("ressource/icons/Multiplication.png");
         final JButton n8 = new JButton(n8ic);
         n8.setToolTipText("Potenz");
         gbc.gridx = 3;
@@ -588,7 +588,7 @@ public class gui implements ActionListener {
         });
 
         // √
-        Icon n18ic = new ImageIcon("ressource/icons/√.png");
+        Icon n18ic = new ImageIcon("ressource/icons/Root.png");
         final JButton n18 = new JButton(n18ic);
         n18.setToolTipText("Wurzel");
         gbc.gridx = 3;
