@@ -300,7 +300,7 @@ public class gui implements ActionListener {
         //AC
         Icon n0ic = new ImageIcon("ressource/icons/AC.png");
         final JButton n0 = new JButton(n0ic);
-        n0.setToolTipText("Alles im Feld löschen");
+        n0.setToolTipText("Alles löschen");
         //Gridbag layout setzen [Quelle:https://www.tutorialspoint.com/swing/swing_gridbaglayout.htm]
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -314,12 +314,33 @@ public class gui implements ActionListener {
         });
 
         // (
-        Icon n1ic = new ImageIcon("ressource/icons/(.png");
+        Icon n1ic = new ImageIcon("ressource/icons/C.png");
         final JButton n1 = new JButton(n1ic);
         gbc.gridx = 1;
         gbc.gridy = 0;
         p1.add(n1, gbc);
+        n1.setToolTipText("löschen");
         n1.addActionListener(e -> {
+            int j = textFeld.getCaretPosition();
+            textFeld.setBackground(Color.white);
+            try {
+                String str = textFeld.getText();
+                //[Quelle:https://www.techiedelight.com/replace-character-specific-index-java-string/]
+                str = str.substring(0, j - 1) + str.substring(j - 1 + 1);
+                textFeld.setText(str);
+                textFeld.requestFocusInWindow();
+                textFeld.setCaretPosition(j - 1);
+            } catch (Exception ignored) {
+            }
+        });
+
+        // (
+        Icon n2ic = new ImageIcon("ressource/icons/(.png");
+        final JButton n2 = new JButton(n2ic);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        p1.add(n2, gbc);
+        n2.addActionListener(e -> {
             //Speichert das Rechensymbol in num1
             String num1 = "(";
             //Speichert den Text in der Rechenbox in global
@@ -336,30 +357,14 @@ public class gui implements ActionListener {
         });
 
         // )
-        Icon n2ic = new ImageIcon("ressource/icons/).png");
-        final JButton n2 = new JButton(n2ic);
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        p1.add(n2, gbc);
-        n2.addActionListener(e -> {
-            String num1 = ")";
-            String global = textFeld.getText();
-            int j = textFeld.getCaretPosition();
-            global = global.substring(0, j) + num1 + global.substring(j);
-            textFeld.setText(global);
-            textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(j + 1);
-        });
-
-        // .
-        Icon n3ic = new ImageIcon("ressource/icons/..png");
+        Icon n3ic = new ImageIcon("ressource/icons/).png");
         final JButton n3 = new JButton(n3ic);
         n3.setToolTipText("Komma");
         gbc.gridx = 3;
         gbc.gridy = 0;
         p1.add(n3, gbc);
         n3.addActionListener(e -> {
-            String num1 = ".";
+            String num1 = ")";
             String global = textFeld.getText();
             int j = textFeld.getCaretPosition();
             global = global.substring(0, j) + num1 + global.substring(j);
@@ -375,7 +380,13 @@ public class gui implements ActionListener {
         gbc.gridx = 4;
         gbc.gridy = 0;
         p1.add(n4, gbc);
-        n4.addActionListener(e -> System.exit(2));
+        n4.addActionListener(e->{
+            //JOptionPane [Quelle:https://www.javatpoint.com/java-joptionpane]
+            int a = JOptionPane.showConfirmDialog(jmain, "Close?");
+            if (a == JOptionPane.YES_OPTION) {
+                System.exit(2); //ESC
+            }
+        });
 
         // 7
         Icon n5ic = new ImageIcon("ressource/icons/7.png");
@@ -547,12 +558,12 @@ public class gui implements ActionListener {
         p1.add(n15, gbc);
         n15.addActionListener(e -> {
             String num1 = "1";
-            String global = textFeld.getText();
-            int j = textFeld.getCaretPosition();
-            global = global.substring(0, j) + num1 + global.substring(j);
-            textFeld.setText(global);
-            textFeld.requestFocusInWindow();
-            textFeld.setCaretPosition(j + 1);
+                String global = textFeld.getText();
+                int j = textFeld.getCaretPosition();
+                global = global.substring(0, j) + num1 + global.substring(j);
+                textFeld.setText(global);
+                textFeld.requestFocusInWindow();
+                textFeld.setCaretPosition(j + 1);
         });
 
         //2
@@ -640,29 +651,23 @@ public class gui implements ActionListener {
 
         //21 von 20 überlagert
 
-        //C
-        Icon n22ic = new ImageIcon("ressource/icons/C.png");
+        // .
+        Icon n22ic = new ImageIcon("ressource/icons/..png");
         final JButton n22 = new JButton(n22ic);
-        n22.setToolTipText("Entfernen");
+        n22.setToolTipText("Komma");
         gbc.gridx = 2;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         gbc.weightx = 0;
         p1.add(n22, gbc);
         n22.addActionListener(e -> {
+            String num1 = ",";
+            String global = textFeld.getText();
             int j = textFeld.getCaretPosition();
-            textFeld.setBackground(Color.white);
-            try {
-                String str = textFeld.getText();
-                //[Quelle:https://www.techiedelight.com/replace-character-specific-index-java-string/]
-                str = str.substring(0, j - 1) + str.substring(j - 1 + 1);
-                textFeld.setText(str);
-                textFeld.requestFocusInWindow();
-                textFeld.setCaretPosition(j - 1);
-            } catch (Exception e2) {
-                textFeld.setBackground(Color.RED);
-                textFeld.setText("[Error] Nicht Möglich");
-            }
+            global = global.substring(0, j) + num1 + global.substring(j);
+            textFeld.setText(global);
+            textFeld.requestFocusInWindow();
+            textFeld.setCaretPosition(j + 1);
         });
 
         //=
@@ -676,11 +681,13 @@ public class gui implements ActionListener {
         n23.addActionListener(e -> {
             if (!textFeld.getText().isEmpty()) {
                 try {
-                    String s;
+                    String s = textFeld.getText();
+                    //Englische Schreibweise
+                    s = s.replaceAll(",",".");
                     if (!Variablen.isEmpty()) {
-                        s = String.valueOf(prechner.rechnerstarten(textFeld.getText(), Variablen));
+                        s = String.valueOf(prechner.rechnerstarten(s, Variablen));
                     } else {
-                        s = String.valueOf(prechner.rechnerstarten(textFeld.getText()));
+                        s = String.valueOf(prechner.rechnerstarten(s));
                     }
                     //Wenn es keine Nachkommastellen gibt werden das Komma und die 0 entfernt
                     //[Quelle:https://www.javatpoint.com/java-string-endswith]
@@ -688,6 +695,7 @@ public class gui implements ActionListener {
                         //Löscht die letzten 2 Zeichen[Quelle:https://stackoverflow.com/questions/30708036/delete-the-last-two-characters-of-the-string]
                         s = s.substring(0, s.length() - 2);
                     }
+                    s = s.replaceAll("\\.",",");
                     //Ergebnis der Liste hinzufügen
                     model0.addElement(textFeld.getText() + "=" + s);
                     //Ergebnis in textFeld setzen
@@ -729,10 +737,27 @@ public class gui implements ActionListener {
         n25.addActionListener(e -> {
             if (!textFeld.getText().isEmpty()) {
                 //Erstmal die Rechnung lösen
+                n23.doClick();
                 try {
-                    double global = Double.parseDouble(textFeld.getText());
-                    textFeld.setText(String.valueOf(Math.round(global)));
+                    //double in der englischen Schreibweise speichern
+                    double global = Double.parseDouble(textFeld.getText().replaceAll(",","."));
+                    //runden
+                    global = Math.round(global);
+                    //als String in deutscher Schreibweise speichern
+                    String str = String.valueOf(global).replaceAll("\\.",",");
+                    // ,0 entfernen
+                    //Löscht die letzten 2 Zeichen[Quelle:https://stackoverflow.com/questions/30708036/delete-the-last-two-characters-of-the-string]
+                    str = str.substring(0, str.length() - 2);
+                    //In die Liste einfügen
+                    model0.addElement(textFeld.getText()+"≈"+str);
+                    //Runden und dann in deutscher Schreibweise in das Lösungsfeld setzen
+                    textFeld.setText(str);
+                    //Verhindert dopplungen von Rechner und runden Einträgen
+                    if(model0.getElementAt(model0.size()-2).equals(model0.getElementAt(model0.size()-1).replaceAll("≈","="))){
+                        model0.remove(model0.size()-2);
+                    }
                 } catch (Exception ex) {
+                    //theoretisch nicht erreichbar
                     textFeld.setText("[ERROR] Nur einzelne Zahlen runden");
                     textFeld.setBackground(Color.red);
                 }
@@ -817,13 +842,31 @@ public class gui implements ActionListener {
             if (!textFeld.getText().isEmpty()) {
                 n23.doClick();
                 try {
-                    double global = Double.parseDouble(textFeld.getText());
-                    double value = Math.round(100.0 * global) / 100.0;
-                    textFeld.setText(String.valueOf(value));
+                    //double in der englischen Schreibweise speichern
+                    double global = Double.parseDouble(textFeld.getText().replaceAll(",", "."));
+                    //runden
+                    global = Math.round(100.0 * global) / 100.0;
+                    //als String in deutscher Schreibweise speichern
+                    String str = String.valueOf(global).replaceAll("\\.", ",");
+                    // ,0 entfernen falls vorhanden
+                    if (str.endsWith(",0")) {
+                        //Löscht die letzten 2 Zeichen[Quelle:https://stackoverflow.com/questions/30708036/delete-the-last-two-characters-of-the-string]
+                        str = str.substring(0, str.length() - 2);
+                    }
+                    //In die Liste einfügen
+                    model0.addElement(textFeld.getText() + "≈" + str);
+                    //Runden und dann in deutscher Schreibweise in das Lösungsfeld setzen
+                    textFeld.setText(str);
+                    //Verhindert dopplungen von Rechner und runden Einträgen
+                    if(model0.getElementAt(model0.size()-2).equals(model0.getElementAt(model0.size()-1).replaceAll("≈","="))){
+                        model0.remove(model0.size()-2);
+                    }
                 } catch (Exception ex) {
+                    //theoretisch nicht erreichbar
                     textFeld.setText("[ERROR] Nur einzelne Zahlen runden");
                     textFeld.setBackground(Color.red);
                 }
+
                 textFeld.requestFocusInWindow();
                 textFeld.setCaretPosition(textFeld.getDocument().getLength());
             }
@@ -1052,7 +1095,6 @@ public class gui implements ActionListener {
             public void rechnen() {
                 //rein visuell. Aktiviert die Buttons falls das Textfeld leer ist
                 if (textFeld.getText().isEmpty()) {
-                    System.out.println("JA");
                     n23.setEnabled(true);
                     n25.setEnabled(true);
                     n30.setEnabled(true);
@@ -1062,11 +1104,13 @@ public class gui implements ActionListener {
                         n23.setEnabled(true);
                         loesung.setBackground(Color.WHITE);
                         //Taschenrechner.Rechner aufrufen
-                        String s;
+                        String s = textFeld.getText();
+                        //Englische Schreibweise
+                        s = s.replaceAll(",",".");
                         if (!Variablen.isEmpty()) {
-                            s = String.valueOf(prechner.rechnerstarten(textFeld.getText(), Variablen));
+                            s = String.valueOf(prechner.rechnerstarten(s, Variablen));
                         } else {
-                            s = String.valueOf(prechner.rechnerstarten(textFeld.getText()));
+                            s = String.valueOf(prechner.rechnerstarten(s));
                         }
                         //Wenn es keine Nachkommastellen gibt werden das Komma und die 0 entfernt
                         //[Quelle:https://www.javatpoint.com/java-string-endswith]
@@ -1074,8 +1118,6 @@ public class gui implements ActionListener {
                             //Löscht die letzten 2 Zeichen[Quelle:https://stackoverflow.com/questions/30708036/delete-the-last-two-characters-of-the-string]
                             s = s.substring(0, s.length() - 2);
                         }
-                        //Ergebnis in textFeld setzen
-                        loesung.setText("Lösung:" + s);
                         //Deaktiviert die Runden Funktion wenn mehr als nur ein int in der Rechenbox steht
                         //Schaut ob überhaupt ein Komma vorkommt [Quelle:https://www.javatpoint.com/java-string-contains]
                         if (s.contains(".")) {
@@ -1092,13 +1134,19 @@ public class gui implements ActionListener {
                             n25.setEnabled(false);
                             n30.setEnabled(false);
                         }
+                        //Deutsche Schreibweise
+                        s = s.replaceAll("\\.",",");
+                        //Ergebnis in textFeld setzen
+                        loesung.setText("Lösung:" + s);
                     } catch (Exception d) {
                         //Deaktiviert den "=" Knopf da die Rechnung nicht möglich ist
                         n23.setEnabled(false);
+                        /*
                         String str = d.getMessage();
                         if (d.getMessage().contains("String index out of range:"))
                             str = "Fehlende Zahl";
                         loesung.setText(str);
+                        */
                         loesung.setBackground(Color.red);
                         if (textFeld.getText().contains(".")) {
                             try {
