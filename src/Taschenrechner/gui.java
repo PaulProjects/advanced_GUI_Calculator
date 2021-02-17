@@ -9,21 +9,15 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class gui implements ActionListener {
+public class gui{
 
     //Konstruktor
     public gui() {
-    }
-
-    //Methode zum Überschreiben
-    public void actionPerformed(ActionEvent ae) {
     }
 
     static private final ArrayList<String> Variablen = new ArrayList<>();
