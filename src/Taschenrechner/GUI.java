@@ -14,13 +14,13 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class gui{
+public class GUI{
 
     //Konstruktor
-    public gui() {
+    public GUI() {
     }
 
-    static private final ArrayList<String> Variablen = new ArrayList<>();
+    static private final ArrayList<String> variablen = new ArrayList<>();
 
     public static void main(String[] args) {
         //Taschenrechner.Rechner als Objekt anlegen
@@ -678,8 +678,8 @@ public class gui{
                     String s = textFeld.getText();
                     //Englische Schreibweise
                     s = s.replaceAll(",",".");
-                    if (!Variablen.isEmpty()) {
-                        s = String.valueOf(prechner.rechnerstarten(s, Variablen));
+                    if (!variablen.isEmpty()) {
+                        s = String.valueOf(prechner.rechnerstarten(s, variablen));
                     } else {
                         s = String.valueOf(prechner.rechnerstarten(s));
                     }
@@ -940,19 +940,19 @@ public class gui{
             Variablen Feld
          */
         DefaultListModel<String> model1 = new DefaultListModel<>();
-        final JList<String> variablen = new JList<>(model1);
-        variablen.setLayoutOrientation(JList.VERTICAL);
+        final JList<String> variablenList = new JList<>(model1);
+        variablenList.setLayoutOrientation(JList.VERTICAL);
         //Hintergrundfarbe
-        variablen.setBackground(Color.decode("#999999"));
+        variablenList.setBackground(Color.decode("#999999"));
         //Textfarbe
-        variablen.setForeground(Color.WHITE);
+        variablenList.setForeground(Color.WHITE);
         //Text in die mitte [Quelle:https://stackoverflow.com/a/21029761]
-        DefaultListCellRenderer renderer = (DefaultListCellRenderer) variablen.getCellRenderer();
+        DefaultListCellRenderer renderer = (DefaultListCellRenderer) variablenList.getCellRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
 
         //Die Liste scrollbar machen (Wird nicht benutzt im Moment!)
         JScrollPane scrollPaneRechnungen1 = new JScrollPane();
-        scrollPaneRechnungen1.setViewportView(variablen);
+        scrollPaneRechnungen1.setViewportView(variablenList);
         scrollPaneRechnungen1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPaneRechnungen1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
@@ -960,7 +960,7 @@ public class gui{
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridheight = 3;
-        p2.add(variablen, gbc);
+        p2.add(variablenList, gbc);
 
         //n37
 
@@ -1005,7 +1005,7 @@ public class gui{
                 }
                 model1.addElement(str);
                 n36.setText("");
-                Variablen.add(str);
+                variablen.add(str);
                 textFeld.setText(textFeld.getText());
             } else {
                 n37.setIcon(new ImageIcon("ressource/icons/+roundred.png"));
@@ -1040,7 +1040,7 @@ public class gui{
         nvariableninsert.setToolTipText("Variable in das Textfeld einfügen");
         variablenaction.add(nvariableninsert);
         nvariableninsert.addActionListener(actionEvent -> {
-            String str = variablen.getSelectedValue();
+            String str = variablenList.getSelectedValue();
             if (str == null) str = "";
             //Nur das Ergebnis wird benötigt [Quelle:https://stackoverflow.com/questions/16741274/java-extract-characters-after-a-specific-character]
             str = str.substring(str.lastIndexOf("=") + 1);
@@ -1052,14 +1052,14 @@ public class gui{
             textFeld.requestFocusInWindow();
             textFeld.setCaretPosition(j + str.length());
             //Auswahl wird rückgängig gemacht [Quelle:https://www.tutorialspoint.com/how-can-we-clear-all-selections-in-java-swing-jlist]
-            variablen.clearSelection();
+            variablenList.clearSelection();
         });
 
         JButton nvariablenremove = new JButton(nredpillic);
         nvariablenremove.setToolTipText("Variable aus der Liste entfernen");
         variablenaction.add(nvariablenremove);
         nvariablenremove.addActionListener(actionEvent -> {
-            int index = variablen.getSelectedIndex();
+            int index = variablenList.getSelectedIndex();
             if (index >= 0) {
                 model1.remove(index);
             }
@@ -1101,8 +1101,8 @@ public class gui{
                         String s = textFeld.getText();
                         //Englische Schreibweise
                         s = s.replaceAll(",",".");
-                        if (!Variablen.isEmpty()) {
-                            s = String.valueOf(prechner.rechnerstarten(s, Variablen));
+                        if (!variablen.isEmpty()) {
+                            s = String.valueOf(prechner.rechnerstarten(s, variablen));
                         } else {
                             s = String.valueOf(prechner.rechnerstarten(s));
                         }
