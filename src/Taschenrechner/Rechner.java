@@ -131,7 +131,6 @@ public class Rechner {
         }
         //Rekursion zur Lösung der Rechnung
         parts[1] = String.valueOf(calcKlammern(parts[1]));
-
         if (parts[0].length() != 0) {
             boolean operatorTest = true;
             if (parts[0].length() >= 3) {
@@ -142,11 +141,13 @@ public class Rechner {
                     parts[1] = String.valueOf(calc2(Double.parseDouble(parts[1]), operator));
                 }
             }
+            //Ist für Operatoren vor Klammern zuständig
             if (operatorTest) {
                 int operator = getOperator(String.valueOf(parts[0].charAt(parts[0].length() - 1)));
                 //Fügt ein Malzeichen an falls z.b. "10(8+2)" geschrieben wurde"
                 if (operator == -1) parts[0] = parts[0] + "*";
                 else {
+                    //Für die Potenz
                     if (operator == OPERATOR_POW) {
                         parts[0] = parts[0].substring(0, parts[0].length() - 1);
                         parts[1] = String.valueOf(calc2(Double.parseDouble(parts[1]), operator));
@@ -204,11 +205,15 @@ public class Rechner {
         return new String[]{str.substring(0, clipOpen), str.substring(clipOpen + 1, clipClose), str.substring(clipClose + 1)};
     }
 
+    //Rechner für Terme ohne Klammern
     private double calcSingleStr(String str) throws Exception {
+        //Schaut ob überhaupt etwas übergeben wurde
         if (str.length() == 0) {
             throw new Exception("Missing operation: " + str);
         }
+        //Legt eine neue Liste an
         ArrayList<String> parts = new ArrayList<>();
+        //Speichert in der Liste die Teile des Terms ab
         while (true) {
             int posEnd;
             if (String.valueOf(str.charAt(0)).equals("-")) {
@@ -223,6 +228,7 @@ public class Rechner {
             str = str.substring(posEnd + 1);
         }
         if (parts.size() < 3) return Double.parseDouble(str);
+        //Wendet die Operatoren an
         while (true) {
             boolean pointFound = false;
             for (int i = 1; i < parts.size(); i += 2) {
@@ -244,13 +250,19 @@ public class Rechner {
         return retVal;
     }
 
+    //Gibt den Index der nächstletzten Zahl zurück
     private int nextNumber(String str) {
         int i = 0;
-        for (; i < str.length(); i++) if (!DIGITS_CONTENTS.contains(String.valueOf(str.charAt(i)))) return i;
+        for (; i < str.length(); i++){
+            if (!DIGITS_CONTENTS.contains(String.valueOf(str.charAt(i)))){
+                return i;
+            }
+        }
         if (i == 0) return -1;
         return i;
     }
 
+    //Rechner für Rechnungen die aus 2 Zahlen bestehen
     private double calc(double d1, double d2, int operator) throws Exception {
         return switch (operator) {
             case OPERATOR_PLUS -> d1 + d2;
@@ -262,6 +274,7 @@ public class Rechner {
         };
     }
 
+    //Rechner für Rechnungen mit 1 Zahl
     private double calc2(double d, int operator) throws Exception {
         return switch (operator) {
             case OPERATOR_SIN -> Math.sin(d);
@@ -274,6 +287,7 @@ public class Rechner {
         };
     }
 
+    //Weist den einzelnen Operatoren einen finalen int zu
     private int getOperator(String str) {
         if (str.length() == 3) {
             return switch (str) {
@@ -292,7 +306,6 @@ public class Rechner {
             case "*" -> OPERATOR_MULTIPLY;
             case "/" -> OPERATOR_DIVIDE;
             case "^" -> OPERATOR_POW;
-            //case "√" -> OPERATOR_SQRT;
             default -> -1;
         };
     }
