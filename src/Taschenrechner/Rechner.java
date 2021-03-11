@@ -56,7 +56,7 @@ public class Rechner {
         //Prüft ob mit Betrag gerechnet wird
         if (str.contains("|")) {
             String betrag;
-            String vorbetrag  = "";
+            String vorbetrag = "";
             String nachbetrag = "";
             //Prüft ob die Schreibweise eingehalten wurde
             if (str.indexOf("|") == str.lastIndexOf("|")) {
@@ -68,7 +68,7 @@ public class Rechner {
             }
             //Speichert was hinter dem Betrag steht
             if (str.lastIndexOf("|") != str.length() - 1) {
-                nachbetrag = str.substring(str.lastIndexOf("|")+1);
+                nachbetrag = str.substring(str.lastIndexOf("|") + 1);
             }
             //Speichert den Betrag
             betrag = str.substring(str.indexOf("|"), str.lastIndexOf("|"));
@@ -77,18 +77,17 @@ public class Rechner {
             //Rechnet den Betrag aus wenn er eine Rechnung enthält
             try {
                 betrag = String.valueOf(calcKlammern(inputueberpruefen(betrag)));
-            }
-            catch(Exception ignored){
+            } catch (Exception ignored) {
             }
             //Setzt das Ergebnis in den Betrag
             betrag = betrag.replaceAll("-", "");
             //Gibt die zusammengesetzte Rechnung zurück
-            return calcpre(vorbetrag+betrag+nachbetrag);
+            return calcpre(vorbetrag + betrag + nachbetrag);
         }
         //Prüft ob es zur Wurzelrechnung kommt
         if (str.contains("√")) {
             String wurzel;
-            String vorwurzel  = "";
+            String vorwurzel = "";
             String nachwurzel = "";
             //Speichert das was vor der Wurzel steht
             if (str.indexOf("√") != 0) {
@@ -99,25 +98,24 @@ public class Rechner {
             //Speichert den Wurzelterm
             try {
                 wurzel = str.substring(0, str.indexOf("]"));
-            }
-            catch(Exception ignored){
+            } catch (Exception ignored) {
                 throw new Exception("missing ]");
             }
             //Das Nach der Wurzel speichern
             if (str.indexOf("]") != str.length() - 1) {
-                nachwurzel = str.substring(str.indexOf("]")+1);
+                nachwurzel = str.substring(str.indexOf("]") + 1);
             }
             //Schaut ob eine geöffnete Klammer da ist wo sie sein sollte
-            if (wurzel.charAt(0)=='[') { //Char primitiv--> Man kann == benutzen
+            if (wurzel.charAt(0) == '[') { //Char primitiv--> Man kann == benutzen
                 throw new Exception("Missing [");
             }
             //Entfernt die Wurzel
             wurzel = wurzel.replaceAll("√", "");
             //Entfernt die Klammer
-            wurzel = wurzel.replaceAll("\\[","");
-            wurzel = wurzel.replaceAll("]","");
+            wurzel = wurzel.replaceAll("\\[", "");
+            wurzel = wurzel.replaceAll("]", "");
             wurzel = calcpre(wurzel);
-            return calcpre(vorwurzel + Math.sqrt(Double.parseDouble(wurzel))+nachwurzel);
+            return calcpre(vorwurzel + Math.sqrt(Double.parseDouble(wurzel)) + nachwurzel);
         }
         return String.valueOf(calcKlammern(inputueberpruefen(str)));
     }
@@ -221,38 +219,29 @@ public class Rechner {
         }
         if (parts.size() < 3) return Double.parseDouble(str);
         //Potenz
-        while (true) {
-            boolean pointFound = false;
+        if(parts.toString().contains("*")) {
             for (int i = 1; i < parts.size(); i += 2) {
                 int operator = getOperator(parts.get(i));
                 if (operator == -1) throw new Exception("Wrong operator: " + str);
                 if (operator == OPERATOR_POW) {
-                    pointFound = true;
                     parts.set(i - 1, String.valueOf(calc(Double.parseDouble(parts.get(i - 1)), Double.parseDouble(parts.get(i + 1)), operator)));
                     parts.remove(i);
                     parts.remove(i);
-                    break;
                 }
             }
-            //Abbruch Bedingung
-            if (!pointFound) break;
         }
         //Wendet Multiplikation und Division an
-        while (true) {
-            boolean pointFound = false;
+        while(parts.toString().contains("*") || parts.toString().contains("/")) {
             for (int i = 1; i < parts.size(); i += 2) {
                 int operator = getOperator(parts.get(i));
                 if (operator == -1) throw new Exception("Wrong operator: " + str);
                 if (operator == OPERATOR_MULTIPLY || operator == OPERATOR_DIVIDE) {
-                    pointFound = true;
                     parts.set(i - 1, String.valueOf(calc(Double.parseDouble(parts.get(i - 1)), Double.parseDouble(parts.get(i + 1)), operator)));
                     parts.remove(i);
                     parts.remove(i);
                     break;
                 }
             }
-            //Abbruch Bedingung
-            if (!pointFound) break;
         }
         double retVal = Double.parseDouble(parts.get(0));
         //Plus, Minus
@@ -264,8 +253,8 @@ public class Rechner {
     //Gibt den Index der nächstletzten Zahl zurück
     private int nextNumber(String str) {
         int i = 0;
-        for (; i < str.length(); i++){
-            if (!DIGITS_CONTENTS.contains(String.valueOf(str.charAt(i)))){
+        for (; i < str.length(); i++) {
+            if (!DIGITS_CONTENTS.contains(String.valueOf(str.charAt(i)))) {
                 return i;
             }
         }
