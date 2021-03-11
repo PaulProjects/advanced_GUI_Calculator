@@ -219,7 +219,7 @@ public class Rechner {
         }
         if (parts.size() < 3) return Double.parseDouble(str);
         //Potenz
-        if(parts.toString().contains("*")) {
+        if(parts.toString().contains("^")) {
             for (int i = 1; i < parts.size(); i += 2) {
                 int operator = getOperator(parts.get(i));
                 if (operator == -1) throw new Exception("Wrong operator: " + str);
