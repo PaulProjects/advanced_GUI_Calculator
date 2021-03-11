@@ -146,16 +146,8 @@ public class Rechner {
                 int operator = getOperator(String.valueOf(parts[0].charAt(parts[0].length() - 1)));
                 //Fügt ein Malzeichen an falls z.b. "10(8+2)" geschrieben wurde"
                 if (operator == -1) parts[0] = parts[0] + "*";
-                else {
-                    //Für die Potenz
-                    if (operator == OPERATOR_POW) {
-                        parts[0] = parts[0].substring(0, parts[0].length() - 1);
-                        parts[1] = String.valueOf(calc2(Double.parseDouble(parts[1]), operator));
-                    }
-                }
             }
         }
-
         if (parts[2].length() != 0)
             if (getOperator(String.valueOf(parts[2].charAt(0))) == -1) parts[2] = "*" + parts[2];
 
@@ -228,13 +220,13 @@ public class Rechner {
             str = str.substring(posEnd + 1);
         }
         if (parts.size() < 3) return Double.parseDouble(str);
-        //Wendet die Operatoren an
+        //Potenz
         while (true) {
             boolean pointFound = false;
             for (int i = 1; i < parts.size(); i += 2) {
                 int operator = getOperator(parts.get(i));
                 if (operator == -1) throw new Exception("Wrong operator: " + str);
-                if (operator == OPERATOR_MULTIPLY || operator == OPERATOR_DIVIDE || operator == OPERATOR_POW) {
+                if (operator == OPERATOR_POW) {
                     pointFound = true;
                     parts.set(i - 1, String.valueOf(calc(Double.parseDouble(parts.get(i - 1)), Double.parseDouble(parts.get(i + 1)), operator)));
                     parts.remove(i);
@@ -242,9 +234,28 @@ public class Rechner {
                     break;
                 }
             }
+            //Abbruch Bedingung
+            if (!pointFound) break;
+        }
+        //Wendet Multiplikation und Division an
+        while (true) {
+            boolean pointFound = false;
+            for (int i = 1; i < parts.size(); i += 2) {
+                int operator = getOperator(parts.get(i));
+                if (operator == -1) throw new Exception("Wrong operator: " + str);
+                if (operator == OPERATOR_MULTIPLY || operator == OPERATOR_DIVIDE) {
+                    pointFound = true;
+                    parts.set(i - 1, String.valueOf(calc(Double.parseDouble(parts.get(i - 1)), Double.parseDouble(parts.get(i + 1)), operator)));
+                    parts.remove(i);
+                    parts.remove(i);
+                    break;
+                }
+            }
+            //Abbruch Bedingung
             if (!pointFound) break;
         }
         double retVal = Double.parseDouble(parts.get(0));
+        //Plus, Minus
         for (int i = 1; i < parts.size(); i += 2)
             retVal = calc(retVal, Double.parseDouble(parts.get(i + 1)), getOperator(parts.get(i)));
         return retVal;
